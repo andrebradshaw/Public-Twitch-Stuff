@@ -210,7 +210,7 @@ evalBtn.style.textAlign = "center";
 var dlBtn = document.createElement("button");
 document.getElementById("pop_container").appendChild(dlBtn);
 dlBtn.setAttribute("id", "dl_box");
-document.getElementById("dl_box").innerText = "Save";
+document.getElementById("dl_box").innerText = "Save Logs";
 dlBtn.style.background = "DarkCyan";
 dlBtn.style.border = "1px solid DarkSlateGrey";
 dlBtn.style.width = "50%";
