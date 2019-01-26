@@ -34,6 +34,37 @@ function unqObj(arr) {
 	return resArr;
 }
 
+function downloadr(arr2D, filename) {
+  if (/\.csv$/.test(filename) === true) {
+    var data = arr2D.map(itm => {
+      return itm.toString().replace(/$/, '\r');
+    }).toString().replace(/\r,/g, '\r');
+  }
+  if (/\.json$|.js$/.test(filename) === true) {
+    var data = JSON.stringify(arr2D);
+    var type = 'data:application/json;charset=utf-8,';
+  } else {
+	var type = 'data:text/plain;charset=utf-8,';
+  }
+  var file = new Blob([data], {
+    type: type
+  });
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(file, filename);
+  } else {
+    var a = document.createElement('a'),
+      url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 10);
+  }
+}
+
 function dragElement() {
   this.style.background = 'CadetBlue';
   this.style.transition = 'all 566ms';
@@ -169,13 +200,31 @@ evalBtn.setAttribute("id", "btn_box");
 document.getElementById("btn_box").innerText = "Search";
 evalBtn.style.background = "DarkCyan";
 evalBtn.style.border = "1px solid DarkSlateGrey";
-evalBtn.style.width = "100%";
+evalBtn.style.width = "50%";
 evalBtn.style.height = "10%";
 evalBtn.style.borderBottomLeftRadius = "1em";
-evalBtn.style.borderBottomRightRadius = "1em";
 evalBtn.style.cursor = "pointer";
 evalBtn.style.color = "white";
 evalBtn.style.textAlign = "center";
+
+var dlBtn = document.createElement("button");
+document.getElementById("pop_container").appendChild(dlBtn);
+dlBtn.setAttribute("id", "dl_box");
+document.getElementById("dl_box").innerText = "Save";
+dlBtn.style.background = "DarkCyan";
+dlBtn.style.border = "1px solid DarkSlateGrey";
+dlBtn.style.width = "50%";
+dlBtn.style.height = "10%";
+dlBtn.style.borderBottomRightRadius = "1em";
+dlBtn.style.cursor = "pointer";
+dlBtn.style.color = "white";
+dlBtn.style.textAlign = "center";
+
+function dlFileName(){
+	var path = reg(/(?<=\.tv\/).+/.exec(window.location.href),0);
+	var tstamp = new Date().getTime();
+	downloadr(chatArr,path+'_'+tstamp+'.json');
+}
 
 function close() {
   document.body.removeChild(document.getElementById("pop_container"));
@@ -209,6 +258,9 @@ function clearSearchRes(){
 }
 
 function searchChat() {
+if(textbox_1.value.length <1){
+	clearSearchRes();
+}
 if(textbox_1.value.length > 3){
   clearSearchRes();
   var matches = [];
@@ -254,4 +306,5 @@ mDiv.addEventListener('mouseover', dragElement);
 evalBtn.addEventListener("click", searchChat);
 clsBtn.addEventListener("click", close);
 expBtn.addEventListener("click", expandPop);
+dlBtn.addEventListener("click", dlFileName);
 textbox_1.addEventListener("keyup", searchChat);
