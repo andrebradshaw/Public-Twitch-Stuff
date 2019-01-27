@@ -4,9 +4,8 @@ var cn = (ob, nm) => {    return ob.getElementsByClassName(nm)  };
 var tn = (ob, nm) => {    return ob.getElementsByTagName(nm)  };
 var nm = (ob, nm) => {    return ob.getElementsByName(nm)  };
 
-var chatArr = Array.from(cn(document, 'chat-line__message')).map(itm => {
-  return [checker(cn(itm, 'chat-author__display-name')[0], 'text'), checker(cn(itm, 'text-fragment')[0], 'text')]
-});
+cn(document,'right-column tw-flex-shrink-0 tw-full-height tw-relative')[0].setAttribute('id','chat_window_ob');
+var chatArr = [];
 
 function getCurrentLogs(){
   var arr = [];
@@ -25,18 +24,18 @@ function getCurrentLogs(){
 var domObserver = new MutationObserver(() => {
   var chats = getCurrentLogs();
   var lastChat = chats[chats.length - 1];
-  chatArr.push(lastChat);
+  chatArr.push(lastChat)
   chatArr = unqObj(chatArr);
 });
 
-domObserver.observe(document, {
+domObserver.observe(document.getElementById('chat_window_ob'), {
   childList: true,
   subtree: true
 });
 
-function unqObj(arr) {
+function unqObj(arrg) {
   var resArr = [];
-  arr.filter(item => {
+  arrg.filter(item => {
     var i = resArr.findIndex(x => x[3] == item[3]);
     if (i <= -1) {
       resArr.push(item);
