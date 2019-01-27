@@ -76,6 +76,7 @@ function downloadr(arr2D, filename) {
   }
 }
 
+
 function dragElement() {
   this.style.background = 'CadetBlue';
   this.style.transition = 'all 566ms';
@@ -192,6 +193,7 @@ expBtn.style.color = "lightgrey";
 
 var textbox_1 = document.createElement("input");
 textbox_1.setAttribute("id", "textbox_code");
+textbox_1.setAttribute("placeholder", "search text");
 document.getElementById("pop_container").appendChild(textbox_1);
 textbox_1.style.width = "100%";
 textbox_1.style.height = "13%";
@@ -202,6 +204,20 @@ textbox_1.style.display = "block";
 textbox_1.style.fontSize = "1.2em";
 textbox_1.style.userSelect = "none";
 textbox_1.style.fontFamily = '"Courier New", monospace';
+
+var textbox_2 = document.createElement("input");
+textbox_2.setAttribute("id", "textbox_2");
+textbox_2.setAttribute("placeholder", "search users");
+document.getElementById("pop_container").appendChild(textbox_2);
+textbox_2.style.width = "100%";
+textbox_2.style.height = "13%";
+textbox_2.style.padding = "6px";
+textbox_2.style.border = "1px solid DarkSlateGrey";
+textbox_2.style.background = "FloralWhite";
+textbox_2.style.display = "block";
+textbox_2.style.fontSize = "1.2em";
+textbox_2.style.userSelect = "none";
+textbox_2.style.fontFamily = '"Courier New", monospace';
 
 var evalBtn = document.createElement("button");
 document.getElementById("pop_container").appendChild(evalBtn);
@@ -261,7 +277,7 @@ function expandPop() {
 }
 
 function clearSearchRes(){
-	if(document.getElementById('resultsBox') != null || /^.{0}$/.test(document.getElementById('textbox_code').value) === true){
+	if(document.getElementById('resultsBox') != null){
 		document.getElementById("pop_container").removeChild(document.getElementById('resultsBox'));
 	}
 }
@@ -271,7 +287,7 @@ function searchChat() {
     clearSearchRes();
   }
 
-  if (textbox_1.value.length > 3) {
+  if (textbox_1.value.length > 2) {
     clearSearchRes();
     var matches = [];
     var regXs = new RegExp(textbox_1.value.replace(/\W+/g, '\\W+'), 'i');
@@ -308,6 +324,46 @@ function searchChat() {
       }
     });
   }
+
+
+  if (textbox_2.value.length > 2) {
+    clearSearchRes();
+    var matches = [];
+    var regXs = new RegExp(textbox_2.value.replace(/\W+/g, '\\W+'), 'i');
+    for (i = 0; i < chatArr.length; i++) {
+      if (regXs.test(chatArr[i][1]) === true) {
+        matches.push(chatArr[i]);
+      }
+    }
+
+    var resultsText = '';
+    matches.forEach(elm => {
+      resultsText = resultsText + elm[1] + ': ' + elm[2] + ' ' + elm[3] + '\n\n'
+    });
+
+    var resultsBox = document.createElement("textarea");
+    resultsBox.setAttribute("id", "resultsBox");
+    document.getElementById("pop_container").appendChild(resultsBox);
+    resultsBox.style.width = "100%";
+    resultsBox.style.height = "100%";
+    resultsBox.style.padding = "6px";
+    resultsBox.style.border = "1px solid DarkSlateGrey";
+    resultsBox.style.background = "FloralWhite";
+    resultsBox.style.display = "block";
+    resultsBox.style.fontSize = "1.2em";
+    resultsBox.style.userSelect = "none";
+    resultsBox.style.fontFamily = '"Courier New", monospace';
+    resultsBox.value = resultsText;
+
+    cDiv.style.width = "45%";
+
+    resultsBox.addEventListener('keyup', () => {
+      if (/^.{0}$/.test(document.getElementById('resultsBox').value) === true) {
+        document.getElementById("pop_container").removeChild(document.getElementById('resultsBox'));
+      }
+    });
+  }
+
 }
 
 cDiv.addEventListener('mouseover', expander);
@@ -318,3 +374,4 @@ clsBtn.addEventListener("click", close);
 expBtn.addEventListener("click", expandPop);
 dlBtn.addEventListener("click", dlFileName);
 textbox_1.addEventListener("keyup", searchChat);
+textbox_2.addEventListener("keyup", searchChat);
