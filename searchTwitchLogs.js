@@ -8,10 +8,22 @@ var chatArr = Array.from(cn(document, 'chat-line__message')).map(itm => {
   return [checker(cn(itm, 'chat-author__display-name')[0], 'text'), checker(cn(itm, 'text-fragment')[0], 'text')]
 });
 
+function getCurrentLogs(){
+  var arr = [];
+  var chatLog = cn(document, 'chat-line__message');
+  for(var i=0; i<chatLog.length; i++){
+    var badges = Array.from(tn(tn(chatLog[i], 'span')[0],'a')).map(elm=>{return tn(elm,'img')[0].getAttribute('alt')})
+    var userName = checker(cn(chatLog[i], 'chat-author__display-name')[0], 'text');
+	var mention = checker(cn(chatLog[i], 'mention-fragment')[0], 'text');
+    var msgText = checker(cn(chatLog[i], 'text-fragment')[0], 'text');
+    var timestamp = new Date().getTime();
+    arr.push([badges,userName,mention,msgText,timestamp])
+  }
+  return arr; 
+}
+
 var domObserver = new MutationObserver(() => {
-  var chats = Array.from(cn(document, 'chat-line__message')).map(itm => {
-    return [checker(cn(itm, 'chat-author__display-name')[0], 'text'), checker(cn(itm, 'text-fragment')[0], 'text')]
-  });
+  var chats = getCurrentLogs();
   var lastChat = chats[chats.length - 1];
   chatArr.push(lastChat);
   chatArr = unqObj(chatArr);
@@ -25,13 +37,13 @@ domObserver.observe(document, {
 function unqObj(arr) {
   var resArr = [];
   arr.filter(item => {
-    var i = resArr.findIndex(x => x[1] == item[1]);
+    var i = resArr.findIndex(x => x[3] == item[3]);
     if (i <= -1) {
       resArr.push(item);
     }
     return null;
   });
-	return resArr;
+  return resArr;
 }
 
 function downloadr(arr2D, filename) {
@@ -156,7 +168,6 @@ clsBtn.style.fontFamily = '"Courier New", monospace';
 clsBtn.style.fontWeight = "bold";
 clsBtn.style.color = "Crimson";
 
-
 var expBtn = document.createElement("button");
 document.getElementById("mover_div").appendChild(expBtn);
 expBtn.setAttribute("id", "btn_expand");
@@ -179,7 +190,6 @@ expBtn.style.fontFamily = '"Courier New", monospace';
 expBtn.style.fontWeight = "bold";
 expBtn.style.align = "right";
 expBtn.style.color = "lightgrey";
-
 
 var textbox_1 = document.createElement("input");
 textbox_1.setAttribute("id", "textbox_code");
@@ -258,46 +268,47 @@ function clearSearchRes(){
 }
 
 function searchChat() {
-if(textbox_1.value.length <1){
-	clearSearchRes();
-}
-if(textbox_1.value.length > 3){
-  clearSearchRes();
-  var matches = [];
-  var regXs = new RegExp(textbox_1.value.replace(/\W+/g, '\\W+'), 'i'); 
-  chatArr.forEach(itm => {
-    if (regXs.test(itm[1]) === true) {
-      matches.push(itm);
+  if (textbox_1.value.length < 1) {
+    clearSearchRes();
+  }
+
+  if (textbox_1.value.length > 3) {
+    clearSearchRes();
+    var matches = [];
+    var regXs = new RegExp(textbox_1.value.replace(/\W+/g, '\\W+'), 'i');
+    for (i = 0; i < chatArr.length; i++) {
+      if (regXs.test(chatArr[i][3]) === true) {
+        matches.push(chatArr[i]);
+      }
     }
-  });
 
-  var resultsText = '';
-  matches.forEach(elm => {
-    resultsText = resultsText + elm[0] + ': ' + elm[1] + '\n\n'
-  });
+    var resultsText = '';
+    matches.forEach(elm => {
+      resultsText = resultsText + elm[1] + ': ' + elm[2] + ' ' + elm[3] + '\n\n'
+    });
 
-  var resultsBox = document.createElement("textarea");
-  resultsBox.setAttribute("id", "resultsBox");
-  document.getElementById("pop_container").appendChild(resultsBox);
-  resultsBox.style.width = "100%";
-  resultsBox.style.height = "100%";
-  resultsBox.style.padding = "6px";
-  resultsBox.style.border = "1px solid DarkSlateGrey";
-  resultsBox.style.background = "FloralWhite";
-  resultsBox.style.display = "block";
-  resultsBox.style.fontSize = "1.2em";
-  resultsBox.style.userSelect = "none";
-  resultsBox.style.fontFamily = '"Courier New", monospace';
-  resultsBox.value = resultsText;
+    var resultsBox = document.createElement("textarea");
+    resultsBox.setAttribute("id", "resultsBox");
+    document.getElementById("pop_container").appendChild(resultsBox);
+    resultsBox.style.width = "100%";
+    resultsBox.style.height = "100%";
+    resultsBox.style.padding = "6px";
+    resultsBox.style.border = "1px solid DarkSlateGrey";
+    resultsBox.style.background = "FloralWhite";
+    resultsBox.style.display = "block";
+    resultsBox.style.fontSize = "1.2em";
+    resultsBox.style.userSelect = "none";
+    resultsBox.style.fontFamily = '"Courier New", monospace';
+    resultsBox.value = resultsText;
 
-  cDiv.style.width = "45%";
+    cDiv.style.width = "45%";
 
-  resultsBox.addEventListener('keyup', () => {
-    if (/^.{0}$/.test(document.getElementById('resultsBox').value) === true) {
-      document.getElementById("pop_container").removeChild(document.getElementById('resultsBox'));
-    }
-  });
-}
+    resultsBox.addEventListener('keyup', () => {
+      if (/^.{0}$/.test(document.getElementById('resultsBox').value) === true) {
+        document.getElementById("pop_container").removeChild(document.getElementById('resultsBox'));
+      }
+    });
+  }
 }
 
 cDiv.addEventListener('mouseover', expander);
