@@ -77,6 +77,7 @@ function downloadr(arr2D, filename) {
   }
 }
 
+
 function dragElement() {
   this.style.background = 'rgb(85, 41, 135)';
   this.style.transition = 'all 566ms';
@@ -270,7 +271,7 @@ function expander() {
 
 function expandPop() {
   if (cDiv.style.width == "16%") {
-    cDiv.style.width = "45%";
+    cDiv.style.width = "35%";
   } else {
     cDiv.style.width = "16%";
   }
@@ -279,6 +280,7 @@ function expandPop() {
 function clearSearchRes(){
 	if(document.getElementById('resultsBox') != null){
 		document.getElementById("pop_container").removeChild(document.getElementById('resultsBox'));
+cDiv.style.width = "16%";
 	}
 }
 
@@ -304,7 +306,7 @@ function searchChat() {
 
     var resultsBox = document.createElement("div");
     resultsBox.setAttribute("id", "resultsBox");
-    resultsBox.setAttribute("class", "simplebar-scroll-content");
+    resultsBox.setAttribute("class", "simplebar-scroll-content")
     document.getElementById("pop_container").appendChild(resultsBox);
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
@@ -318,7 +320,7 @@ function searchChat() {
 	resultsBox.style.color = "white";
     resultsBox.innerHTML = resultsText;
 
-    cDiv.style.width = "45%";
+    cDiv.style.width = "35%";
 
     resultsBox.addEventListener('keyup', () => {
       if (/^.{0}$/.test(document.getElementById('resultsBox').value) === true) {
@@ -345,7 +347,7 @@ function searchChat() {
 
     var resultsBox = document.createElement("div");
     resultsBox.setAttribute("id", "resultsBox");
-    resultsBox.setAttribute("class", "simplebar-scroll-content");
+    resultsBox.setAttribute("class", "simplebar-scroll-content")
     document.getElementById("pop_container").appendChild(resultsBox);
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
@@ -359,7 +361,7 @@ function searchChat() {
     resultsBox.style.color = "white";
     resultsBox.innerHTML = resultsText;
 
-    cDiv.style.width = "45%";
+    cDiv.style.width = "35%";
 
     resultsBox.addEventListener('keyup', () => {
       if (/^.{0}$/.test(document.getElementById('resultsBox').value) === true) {
