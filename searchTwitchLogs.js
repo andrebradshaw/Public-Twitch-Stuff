@@ -126,7 +126,7 @@ cDiv.style.display = "inline-block";
 cDiv.style.position = "fixed";
 cDiv.style.top = "300px";
 cDiv.style.left = "50%";
-cDiv.style.width = "20%";
+cDiv.style.width = "16%";
 cDiv.style.height = "35%";
 cDiv.style.border = "1px solid Transparent";
 cDiv.style.background = "Transparent";
@@ -270,10 +270,10 @@ function expander() {
 }
 
 function expandPop() {
-  if (cDiv.style.width == "25%") {
+  if (cDiv.style.width == "16%") {
     cDiv.style.width = "45%";
   } else {
-    cDiv.style.width = "25%";
+    cDiv.style.width = "16%";
   }
 }
 
