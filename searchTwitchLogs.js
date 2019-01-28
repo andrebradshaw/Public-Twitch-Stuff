@@ -306,7 +306,7 @@ function searchChat() {
 
     var resultsBox = document.createElement("div");
     resultsBox.setAttribute("id", "resultsBox");
-    resultsBox.setAttribute("class", "simplebar-scroll-content")
+    resultsBox.setAttribute("class", "simplebar-scroll-content");
     document.getElementById("pop_container").appendChild(resultsBox);
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
@@ -347,7 +347,7 @@ function searchChat() {
 
     var resultsBox = document.createElement("div");
     resultsBox.setAttribute("id", "resultsBox");
-    resultsBox.setAttribute("class", "simplebar-scroll-content")
+    resultsBox.setAttribute("class", "simplebar-scroll-content");
     document.getElementById("pop_container").appendChild(resultsBox);
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
