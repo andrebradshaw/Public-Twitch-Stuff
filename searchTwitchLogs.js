@@ -11,12 +11,12 @@ function getCurrentLogs(){
   var arr = [];
   var chatLog = cn(document, 'chat-line__message');
   for(var i=0; i<chatLog.length; i++){
-    var badges = Array.from(tn(tn(chatLog[i], 'span')[0],'a')).map(elm=>{return tn(elm,'img')[0].getAttribute('alt')})
+    var badges = Array.from(tn(tn(chatLog[i], 'span')[0],'a')).map(elm=>{return tn(elm,'img')[0].getAttribute('alt')});
     var userName = checker(cn(chatLog[i], 'chat-author__display-name')[0], 'text');
 	var mention = checker(cn(chatLog[i], 'mention-fragment')[0], 'text');
     var msgText = checker(cn(chatLog[i], 'text-fragment')[0], 'text');
     var timestamp = new Date().getTime();
-    arr.push([badges,userName,mention,msgText,timestamp])
+    arr.push([badges,userName,mention,msgText,timestamp]);
   }
   return arr; 
 }
@@ -24,7 +24,7 @@ function getCurrentLogs(){
 var domObserver = new MutationObserver(() => {
   var chats = getCurrentLogs();
   var lastChat = chats[chats.length - 1];
-  chatArr.push(lastChat)
+  chatArr.push(lastChat);
   chatArr = unqObj(chatArr);
 });
 
@@ -196,7 +196,7 @@ textbox_1.setAttribute("id", "textbox_code");
 textbox_1.setAttribute("placeholder", "search text");
 document.getElementById("pop_container").appendChild(textbox_1);
 textbox_1.style.width = "100%";
-textbox_1.style.height = "13%";
+textbox_1.style.height = "9%";
 textbox_1.style.padding = "6px";
 textbox_1.style.border = "1px solid DarkSlateGrey";
 textbox_1.style.background = "FloralWhite";
@@ -210,7 +210,7 @@ textbox_2.setAttribute("id", "textbox_2");
 textbox_2.setAttribute("placeholder", "search users");
 document.getElementById("pop_container").appendChild(textbox_2);
 textbox_2.style.width = "100%";
-textbox_2.style.height = "13%";
+textbox_2.style.height = "9%";
 textbox_2.style.padding = "6px";
 textbox_2.style.border = "1px solid DarkSlateGrey";
 textbox_2.style.background = "FloralWhite";
