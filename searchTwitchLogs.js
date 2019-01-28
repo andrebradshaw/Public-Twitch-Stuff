@@ -76,6 +76,7 @@ function downloadr(arr2D, filename) {
     }, 10);
   }
 }
+
 function dragElement() {
   this.style.background = 'rgb(85, 41, 135)';
   this.style.transition = 'all 566ms';
@@ -89,7 +90,6 @@ function dragElement() {
   } else {
     this.onmousedown = dragMouseDown;
   }
-
   function dragMouseDown(e) {
     e = e || window.event;
     pos3 = e.clientX;
@@ -97,7 +97,6 @@ function dragElement() {
     document.onmouseup = closeDragElement;
     document.onmousemove = elementDrag;
   }
-
   function elementDrag(e) {
     e = e || window.event;
     pos1 = pos3 - e.clientX;
@@ -300,13 +299,12 @@ function searchChat() {
 
     var resultsText = '';
     matches.forEach(elm => {
-//       resultsText = resultsText + elm[1] + ': ' + elm[2] + ' ' + elm[3] + '\n\n'
 		resultsText = resultsText + elm[5];
     });
 
     var resultsBox = document.createElement("div");
     resultsBox.setAttribute("id", "resultsBox");
-    resultsBox.setAttribute("class", "simplebar-scroll-content")
+    resultsBox.setAttribute("class", "simplebar-scroll-content");
     document.getElementById("pop_container").appendChild(resultsBox);
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
@@ -343,12 +341,11 @@ function searchChat() {
     var resultsText = '';
     matches.forEach(elm => {
 		resultsText = resultsText + elm[5];
-//       resultsText = resultsText + elm[1] + ': ' + elm[2] + ' ' + elm[3] + '\n\n'
     });
 
     var resultsBox = document.createElement("div");
     resultsBox.setAttribute("id", "resultsBox");
-    resultsBox.setAttribute("class", "simplebar-scroll-content")
+    resultsBox.setAttribute("class", "simplebar-scroll-content");
     document.getElementById("pop_container").appendChild(resultsBox);
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
@@ -371,8 +368,6 @@ function searchChat() {
     });
   }
 }
-
-
 
 
 cDiv.addEventListener('mouseover', expander);
