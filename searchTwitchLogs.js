@@ -37,7 +37,7 @@ domObserver.observe(document.getElementById('chat_window_ob'), {
 function unqObj(arrg) {
   var resArr = [];
   arrg.filter(item => {
-    var i = resArr.findIndex(x => x[3] == item[3]);
+    var i = resArr.findIndex(x => x[5] == item[5]);
     if (i <= -1) {
       resArr.push(item);
     }
