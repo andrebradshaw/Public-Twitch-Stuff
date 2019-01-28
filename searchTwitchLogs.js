@@ -76,10 +76,8 @@ function downloadr(arr2D, filename) {
     }, 10);
   }
 }
-
-
 function dragElement() {
-  this.style.background = 'CadetBlue';
+  this.style.background = 'rgb(85, 41, 135)';
   this.style.transition = 'all 566ms';
   var elmnt = this.parentElement;
   var pos1 = 0,
@@ -140,8 +138,8 @@ mDiv.setAttribute("id", "mover_div");
 document.getElementById("pop_container").appendChild(mDiv);
 mDiv.style.width = "100%";
 mDiv.style.height = "10%";
-mDiv.style.border = "1px solid DarkCyan ";
-mDiv.style.backgroundColor = 'DarkCyan';
+mDiv.style.border = "1px solid rgb(85, 41, 135)";
+mDiv.style.backgroundColor = 'rgb(94, 47, 147)';
 mDiv.style.borderTopLeftRadius = "1em";
 mDiv.style.borderTopRightRadius = "1em";
 mDiv.style.padding = "3px";
@@ -197,35 +195,37 @@ textbox_1.setAttribute("id", "textbox_code");
 textbox_1.setAttribute("placeholder", "search text");
 document.getElementById("pop_container").appendChild(textbox_1);
 textbox_1.style.width = "100%";
-textbox_1.style.height = "13%";
+textbox_1.style.height = "9%";
 textbox_1.style.padding = "6px";
-textbox_1.style.border = "1px solid DarkSlateGrey";
-textbox_1.style.background = "FloralWhite";
+textbox_1.style.border = "1px solid rgb(85, 41, 135)";
+textbox_1.style.background = "rgb(19, 25, 35)";
 textbox_1.style.display = "block";
 textbox_1.style.fontSize = "1.2em";
 textbox_1.style.userSelect = "none";
 textbox_1.style.fontFamily = '"Courier New", monospace';
+textbox_1.style.color = "white";
 
 var textbox_2 = document.createElement("input");
 textbox_2.setAttribute("id", "textbox_2");
 textbox_2.setAttribute("placeholder", "search users");
 document.getElementById("pop_container").appendChild(textbox_2);
 textbox_2.style.width = "100%";
-textbox_2.style.height = "13%";
+textbox_2.style.height = "9%";
 textbox_2.style.padding = "6px";
-textbox_2.style.border = "1px solid DarkSlateGrey";
-textbox_2.style.background = "FloralWhite";
+textbox_2.style.border = "1px solid rgb(85, 41, 135)";
+textbox_2.style.background = "rgb(19, 25, 35)";
 textbox_2.style.display = "block";
 textbox_2.style.fontSize = "1.2em";
 textbox_2.style.userSelect = "none";
 textbox_2.style.fontFamily = '"Courier New", monospace';
+textbox_2.style.color = "white";
 
 var evalBtn = document.createElement("button");
 document.getElementById("pop_container").appendChild(evalBtn);
 evalBtn.setAttribute("id", "btn_box");
 document.getElementById("btn_box").innerText = "Search";
-evalBtn.style.background = "DarkCyan";
-evalBtn.style.border = "1px solid DarkSlateGrey";
+evalBtn.style.background = "rgb(94, 47, 147)";
+evalBtn.style.border = "1px solid rgb(85, 41, 135)";
 evalBtn.style.width = "50%";
 evalBtn.style.height = "10%";
 evalBtn.style.borderBottomLeftRadius = "1em";
@@ -237,8 +237,8 @@ var dlBtn = document.createElement("button");
 document.getElementById("pop_container").appendChild(dlBtn);
 dlBtn.setAttribute("id", "dl_box");
 document.getElementById("dl_box").innerText = "Save Logs";
-dlBtn.style.background = "DarkCyan";
-dlBtn.style.border = "1px solid DarkSlateGrey";
+dlBtn.style.background = "rgb(94, 47, 147)";
+dlBtn.style.border = "1px solid rgb(85, 41, 135)";
 dlBtn.style.width = "50%";
 dlBtn.style.height = "10%";
 dlBtn.style.borderBottomRightRadius = "1em";
@@ -257,7 +257,7 @@ function close() {
 }
 
 function nodrag() {
-  this.style.background = 'DarkCyan';
+  this.style.background = 'rgb(94, 47, 147)';
   this.style.transition = 'all 566ms';
 }
 
@@ -311,12 +311,13 @@ function searchChat() {
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
     resultsBox.style.padding = "6px";
-    resultsBox.style.border = "1px solid DarkSlateGrey";
-    resultsBox.style.background = "FloralWhite";
+    resultsBox.style.border = "1px solid rgb(85, 41, 135)";
+    resultsBox.style.background = "rgb(19, 25, 35)";
     resultsBox.style.display = "block";
     resultsBox.style.fontSize = "1.2em";
     resultsBox.style.userSelect = "none";
     resultsBox.style.fontFamily = '"Courier New", monospace';
+	resultsBox.style.color = "white";
     resultsBox.innerHTML = resultsText;
 
     cDiv.style.width = "45%";
@@ -352,12 +353,13 @@ function searchChat() {
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
     resultsBox.style.padding = "6px";
-    resultsBox.style.border = "1px solid DarkSlateGrey";
-    resultsBox.style.background = "FloralWhite";
+    resultsBox.style.border = "1px solid rgb(85, 41, 135)";
+    resultsBox.style.background = "rgb(19, 25, 35)";
     resultsBox.style.display = "block";
     resultsBox.style.fontSize = "1.2em";
     resultsBox.style.userSelect = "none";
     resultsBox.style.fontFamily = '"Courier New", monospace';
+    resultsBox.style.color = "white";
     resultsBox.innerHTML = resultsText;
 
     cDiv.style.width = "45%";
