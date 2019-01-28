@@ -16,7 +16,7 @@ function getCurrentLogs(){
 	var mention = checker(cn(chatLog[i], 'mention-fragment')[0], 'text');
     var msgText = checker(cn(chatLog[i], 'text-fragment')[0], 'text');
     var timestamp = new Date().getTime();
-    arr.push([badges,userName,mention,msgText,timestamp]);
+    arr.push([badges,userName,mention,msgText,timestamp,chatLog[i].outerHTML]);
   }
   return arr; 
 }
@@ -300,11 +300,13 @@ function searchChat() {
 
     var resultsText = '';
     matches.forEach(elm => {
-      resultsText = resultsText + elm[1] + ': ' + elm[2] + ' ' + elm[3] + '\n\n'
+//       resultsText = resultsText + elm[1] + ': ' + elm[2] + ' ' + elm[3] + '\n\n'
+		resultsText = resultsText + elm[5];
     });
 
-    var resultsBox = document.createElement("textarea");
+    var resultsBox = document.createElement("div");
     resultsBox.setAttribute("id", "resultsBox");
+    resultsBox.setAttribute("class", "simplebar-scroll-content")
     document.getElementById("pop_container").appendChild(resultsBox);
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
@@ -315,7 +317,7 @@ function searchChat() {
     resultsBox.style.fontSize = "1.2em";
     resultsBox.style.userSelect = "none";
     resultsBox.style.fontFamily = '"Courier New", monospace';
-    resultsBox.value = resultsText;
+    resultsBox.innerHTML = resultsText;
 
     cDiv.style.width = "45%";
 
@@ -339,11 +341,13 @@ function searchChat() {
 
     var resultsText = '';
     matches.forEach(elm => {
-      resultsText = resultsText + elm[1] + ': ' + elm[2] + ' ' + elm[3] + '\n\n'
+		resultsText = resultsText + elm[5];
+//       resultsText = resultsText + elm[1] + ': ' + elm[2] + ' ' + elm[3] + '\n\n'
     });
 
-    var resultsBox = document.createElement("textarea");
+    var resultsBox = document.createElement("div");
     resultsBox.setAttribute("id", "resultsBox");
+    resultsBox.setAttribute("class", "simplebar-scroll-content")
     document.getElementById("pop_container").appendChild(resultsBox);
     resultsBox.style.width = "100%";
     resultsBox.style.height = "100%";
@@ -354,7 +358,7 @@ function searchChat() {
     resultsBox.style.fontSize = "1.2em";
     resultsBox.style.userSelect = "none";
     resultsBox.style.fontFamily = '"Courier New", monospace';
-    resultsBox.value = resultsText;
+    resultsBox.innerHTML = resultsText;
 
     cDiv.style.width = "45%";
 
@@ -364,8 +368,10 @@ function searchChat() {
       }
     });
   }
-
 }
+
+
+
 
 cDiv.addEventListener('mouseover', expander);
 mDiv.addEventListener('mouseout', nodrag);
