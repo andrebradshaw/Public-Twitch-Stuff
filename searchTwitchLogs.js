@@ -11,12 +11,12 @@ function getCurrentLogs(){
   var arr = [];
   var chatLog = cn(document, 'chat-line__message');
   for(var i=0; i<chatLog.length; i++){
-    var badges = Array.from(tn(tn(chatLog[i], 'span')[0],'a')).map(elm=>{return tn(elm,'img')[0].getAttribute('alt')})
+    var badges = Array.from(tn(tn(chatLog[i], 'span')[0],'a')).map(elm=>{return tn(elm,'img')[0].getAttribute('alt')});
     var userName = checker(cn(chatLog[i], 'chat-author__display-name')[0], 'text');
 	var mention = checker(cn(chatLog[i], 'mention-fragment')[0], 'text');
     var msgText = checker(cn(chatLog[i], 'text-fragment')[0], 'text');
     var timestamp = new Date().getTime();
-    arr.push([badges,userName,mention,msgText,timestamp])
+    arr.push([badges,userName,mention,msgText,timestamp]);
   }
   return arr; 
 }
@@ -25,7 +25,7 @@ var domObserver = new MutationObserver(() => {
   var chats = getCurrentLogs();
   for(c=0; c<chats.length; c++){chatArr.push(chats[c]);}
   var lastChat = chats[chats.length - 1];
-  chatArr.push(lastChat)
+  chatArr.push(lastChat);
   chatArr = unqObj(chatArr);
 });
 
@@ -109,7 +109,7 @@ function dragElement() {
     elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
     elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
     elmnt.style.opacity = "0.85";
-    elmnt.style.transition = "opacity 1300ms"
+    elmnt.style.transition = "opacity 1300ms";
   }
 
   function closeDragElement() {
