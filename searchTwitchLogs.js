@@ -16,7 +16,10 @@ function getCurrentLogs(){
 	var mention = checker(cn(chatLog[i], 'mention-fragment')[0], 'text');
     var msgText = checker(cn(chatLog[i], 'text-fragment')[0], 'text');
     var timestamp = new Date().getTime();
-    arr.push([badges,userName,mention,msgText,timestamp,chatLog[i].outerHTML]);
+	var htmlDat = chatLog[i].outerHTML; 
+	if(/omit_cat_shit/.test(htmlDat) === false){
+      arr.push([badges,userName,mention,msgText,timestamp,htmlDat]);
+    }
   }
   return arr; 
 }
@@ -284,65 +287,23 @@ cDiv.style.width = "16%";
 	}
 }
 
-function searchChat() {
-  if (textbox_1.value.length < 1) {
-    clearSearchRes();
-  }
 
-  if (textbox_1.value.length > 2) {
+function createResDivs(obj, n){
+  if (obj.value.length > 2) {
     clearSearchRes();
     var matches = [];
-    var regXs = new RegExp(textbox_1.value.replace(/\W+/g, '\\W+'), 'i');
+    var regXs = new RegExp(obj.value.replace(/\W+/g, '\\W+'), 'i');
     for (i = 0; i < chatArr.length; i++) {
-      if (regXs.test(chatArr[i][3]) === true) {
+      if (regXs.test(chatArr[i][n]) === true) {
         matches.push(chatArr[i]);
       }
     }
 
     var resultsText = '';
     matches.forEach(elm => {
-		resultsText = resultsText + elm[5];
-    });
-
-    var resultsBox = document.createElement("div");
-    resultsBox.setAttribute("id", "resultsBox");
-    resultsBox.setAttribute("class", "simplebar-scroll-content");
-    document.getElementById("pop_container").appendChild(resultsBox);
-    resultsBox.style.width = "100%";
-    resultsBox.style.height = "100%";
-    resultsBox.style.padding = "6px";
-    resultsBox.style.border = "1px solid rgb(85, 41, 135)";
-    resultsBox.style.background = "rgb(19, 25, 35)";
-    resultsBox.style.display = "block";
-    resultsBox.style.fontSize = "1.2em";
-    resultsBox.style.userSelect = "none";
-    resultsBox.style.fontFamily = '"Courier New", monospace';
-	resultsBox.style.color = "white";
-    resultsBox.innerHTML = resultsText;
-
-    cDiv.style.width = "35%";
-
-    resultsBox.addEventListener('keyup', () => {
-      if (/^.{0}$/.test(document.getElementById('resultsBox').value) === true) {
-        document.getElementById("pop_container").removeChild(document.getElementById('resultsBox'));
-      }
-    });
-  }
-
-
-  if (textbox_2.value.length > 2) {
-    clearSearchRes();
-    var matches = [];
-    var regXs = new RegExp(textbox_2.value.replace(/\W+/g, '\\W+'), 'i');
-    for (i = 0; i < chatArr.length; i++) {
-      if (regXs.test(chatArr[i][1]) === true) {
-        matches.push(chatArr[i]);
-      }
-    }
-
-    var resultsText = '';
-    matches.forEach(elm => {
-		resultsText = resultsText + elm[5];
+		var timer = reg(/\d+:\d+:\d+/.exec(new Date(elm[4]).toTimeString()),0);
+		var styler = ' style="font-size: 0.8em; color: DarkOrchid" ';
+		resultsText = resultsText + elm[5].replace(/<\/span><\/div>$/, '') + '<b '+styler+'" data="omit_cat_shit">  '+timer+'</b></span></div>';
     });
 
     var resultsBox = document.createElement("div");
@@ -369,6 +330,13 @@ function searchChat() {
       }
     });
   }
+}
+function searchChat() {
+clearSearchRes();
+  createResDivs(textbox_1, 3)
+  createResDivs(textbox_2, 1)
+
+
 }
 
 
