@@ -301,9 +301,9 @@ function createResDivs(obj, n){
 
     var resultsText = '';
     matches.forEach(elm => {
-		var timer = reg(/\d+:\d+:\d+/.exec(new Date(elm[4]).toTimeString()),0);
-		var styler = ' style="font-size: 0.8em; color: DarkOrchid" ';
-		resultsText = resultsText + elm[5].replace(/<\/span><\/div>$/, '') + '<b '+styler+'" data="omit_cat_shit">  '+timer+'</b></span></div>';
+		var timer = reg(/\d+:\d+:\d+/.exec(new Date(elm[4]).toTimeString()),0) + ' ';
+		var styler = ' style="font-size: 0.7em; padding: 3px; border-bottom: 1px solid RebeccaPurple; color: RebeccaPurple"';
+		resultsText = resultsText + elm[5].replace(/<\/span><\/div>$/, '') + '<b '+styler+' data="omit_cat_shit">'+timer+'</b></span></div>';
     });
 
     var resultsBox = document.createElement("div");
@@ -332,11 +332,9 @@ function createResDivs(obj, n){
   }
 }
 function searchChat() {
-clearSearchRes();
-  createResDivs(textbox_1, 3)
-  createResDivs(textbox_2, 1)
-
-
+	clearSearchRes();
+  createResDivs(textbox_1, 3);
+  createResDivs(textbox_2, 1);
 }
 
 
