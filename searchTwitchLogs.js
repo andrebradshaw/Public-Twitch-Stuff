@@ -4,6 +4,12 @@ var cn = (ob, nm) => {    return ob.getElementsByClassName(nm)  };
 var tn = (ob, nm) => {    return ob.getElementsByTagName(nm)  };
 var nm = (ob, nm) => {    return ob.getElementsByName(nm)  };
 
+function addProfileLink(elm){
+	var path = reg(/(?<=<span class="chat-author__display-name" data-a-target="chat-message-username" data-a-user=").+?(?=")/.exec(elm),0);
+	return elm.replace(/(?<=<span class="chat-author__display-name" data-a-target="chat-message-username".+?>)/, '<a href="https://www.twitch.tv/'+path+'">')
+.replace(/(?<=<span class="chat-author__display-name" data-a-target="chat-message-username".+?>.+?)</, '</a><');
+}
+
 cn(document,'right-column tw-flex-shrink-0 tw-full-height tw-relative')[0].setAttribute('id','chat_window_ob');
 var chatArr = [];
 
@@ -303,7 +309,7 @@ function createResDivs(obj, n){
     matches.forEach(elm => {
 		var timer = reg(/\d+:\d+:\d+/.exec(new Date(elm[4]).toTimeString()),0) + ' ';
 		var styler = ' style="font-size: 0.7em; padding: 3px; border-bottom: 1px solid RebeccaPurple; color: RebeccaPurple"';
-		resultsText = resultsText + elm[5].replace(/<\/span><\/div>$/, '') + '<b '+styler+' data="omit_cat_shit">'+timer+'</b></span></div>';
+		resultsText = resultsText + addProfileLink(elm[5]).replace(/<\/span><\/div>$/, '') + '<b '+styler+' data="omit_cat_shit">'+timer+'</b></span></div>';
     });
 
     var resultsBox = document.createElement("div");
