@@ -21,7 +21,7 @@ function openChatAuthor(){
 }
 
 cn(document,'right-column tw-flex-shrink-0 tw-full-height tw-relative')[0].setAttribute('id','chat_window_ob');
-var chatArr = document.getElementById("pop_container") || document.getElementById("chat_window_ob") ? chatArr : [];
+var chatArr = document.getElementById("pop_container") ? chatArr : [];
 
 function getCurrentLogs(){
   var arr = [];
