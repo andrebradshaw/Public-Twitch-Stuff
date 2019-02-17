@@ -1,4 +1,4 @@
-var checker = (elm, type) => {
+function checker(elm, type){
   if (elm != undefined) {
     if (type == 'click') return elm.click();
     if (type == 'href') return elm.href; 
