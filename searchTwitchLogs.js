@@ -1,17 +1,27 @@
-function checker(elm, type) {  if (elm != undefined) {    if (type == 'src') {     return elm.getAttribute('src');    }	if (type == 'click') {     elm.click();    }	if (type == 'href') {      return elm.href;    }    if (type == 'text') {      return elm.innerText.trim().replace(/,/g, '');    }    if (type == 'next') {      return elm;    }  } else {    return '';  }}
-function reg(elm, n){if(elm != null){return elm[n];}else{return '';}}
-var cn = (ob, nm) => {    return ob.getElementsByClassName(nm)  };
-var tn = (ob, nm) => {    return ob.getElementsByTagName(nm)  };
-var nm = (ob, nm) => {    return ob.getElementsByName(nm)  };
+var checker = (elm, type) => {
+  if (elm != undefined) {
+    if (type == 'click') return elm.click();
+    if (type == 'href') return elm.href; 
+    if (type == 'text') return elm.innerText.trim().replace(/,/g, '');
+    if (type == 'next') return elm;
+    if (type == 'src') return elm.getAttribute('src');
+  } else {
+    return '';
+  }
+}
 
-function addProfileLink(elm){
-	var path = reg(/(?<=<span class="chat-author__display-name" data-a-target="chat-message-username" data-a-user=").+?(?=")/.exec(elm),0);
-	return elm.replace(/(?<=<span class="chat-author__display-name" data-a-target="chat-message-username".+?>)/, '<a href="https://www.twitch.tv/'+path+'">')
-.replace(/(?<=<span class="chat-author__display-name" data-a-target="chat-message-username".+?>.+?)</, '</a><');
+var reg = (elm, n) => elm != null ? elm[n] : '';
+var cn = (ob, nm) => ob.getElementsByClassName(nm);
+var tn = (ob, nm) => ob.getElementsByTagName(nm);
+var nm = (ob, nm) => ob.getElementsByName(nm);
+
+function openChatAuthor(){
+	var path = cn(this, 'chat-author__display-name')[0].getAttribute('data-a-user');
+	window.open('https://www.twitch.tv/'+path);
 }
 
 cn(document,'right-column tw-flex-shrink-0 tw-full-height tw-relative')[0].setAttribute('id','chat_window_ob');
-var chatArr = [];
+var chatArr = document.getElementById("pop_container") ? chatArr : [];
 
 function getCurrentLogs(){
   var arr = [];
@@ -56,17 +66,8 @@ function unqObj(arrg) {
 }
 
 function downloadr(arr2D, filename) {
-  if (/\.csv$/.test(filename) === true) {
-    var data = arr2D.map(itm => {
-      return itm.toString().replace(/$/, '\r');
-    }).toString().replace(/\r,/g, '\r');
-  }
-  if (/\.json$|.js$/.test(filename) === true) {
-    var data = JSON.stringify(arr2D);
-    var type = 'data:application/json;charset=utf-8,';
-  } else {
-	var type = 'data:text/plain;charset=utf-8,';
-  }
+  var data = JSON.stringify(arr2D);
+  var type = 'data:application/json;charset=utf-8,';
   var file = new Blob([data], {
     type: type
   });
@@ -125,7 +126,7 @@ function dragElement() {
     elmnt.style.opacity = "1";
   }
 }
-
+if(document.getElementById("pop_container")) document.body.removeChild(document.getElementById("pop_container"));
 var cDiv = document.createElement("div");
 cDiv.setAttribute("id", "pop_container");
 document.body.appendChild(cDiv);
@@ -270,10 +271,6 @@ function nodrag() {
   this.style.transition = 'all 566ms';
 }
 
-function shrinker() {
-  cDiv.style.opacity = ".77", cDiv.style.transition = 'all 566ms';
-}
-
 function expander() {
   cDiv.style.opacity = "1", cDiv.style.transition = 'all 566ms';
 }
@@ -309,7 +306,7 @@ function createResDivs(obj, n){
     matches.forEach(elm => {
 		var timer = reg(/\d+:\d+:\d+/.exec(new Date(elm[4]).toTimeString()),0) + ' ';
 		var styler = ' style="font-size: 0.7em; padding: 3px; border-bottom: 1px solid RebeccaPurple; color: RebeccaPurple"';
-		resultsText = resultsText + addProfileLink(elm[5]).replace(/<\/span><\/div>$/, '') + '<b '+styler+' data="omit_cat_shit">'+timer+'</b></span></div>';
+		resultsText = resultsText + elm[5].replace(/<\/span><\/div>$/, '') + '<b '+styler+' data="omit_cat_shit">'+timer+'</b></span></div>';
     });
 
     var resultsBox = document.createElement("div");
@@ -335,13 +332,18 @@ function createResDivs(obj, n){
         document.getElementById("pop_container").removeChild(document.getElementById('resultsBox'));
       }
     });
+    var resText = cn(document, 'chat-line__message');
+    for(t=0; t<resText.length; t++){
+      if(/omit_cat_shit/.test(resText[t].outerHTML)) resText[t].addEventListener("click", openChatAuthor);
+    }
   }
 }
 function searchChat() {
-	clearSearchRes();
+  clearSearchRes();
   createResDivs(textbox_1, 3);
   createResDivs(textbox_2, 1);
 }
+
 
 
 cDiv.addEventListener('mouseover', expander);
