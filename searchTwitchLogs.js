@@ -21,7 +21,7 @@ function openChatAuthor(){
 }
 
 cn(document,'right-column tw-flex-shrink-0 tw-full-height tw-relative')[0].setAttribute('id','chat_window_ob');
-var chatArr = document.getElementById("pop_container") ? chatArr : [];
+var chatArr = document.getElementById("pop_container") || document.getElementById("chat_window_ob") ? chatArr : [];
 
 function getCurrentLogs(){
   var arr = [];
@@ -323,7 +323,7 @@ function createResDivs(obj, n){
     resultsBox.style.userSelect = "none";
     resultsBox.style.fontFamily = '"Courier New", monospace';
     resultsBox.style.color = "white";
-    resultsBox.innerHTML = resultsText;
+    resultsBox.innerHTML = resultsText ? resultsText : '<div style="padding: 10px;">no matches</div>';
 
     cDiv.style.width = "35%";
 
@@ -334,7 +334,7 @@ function createResDivs(obj, n){
     });
     var resText = cn(document, 'chat-line__message');
     for(t=0; t<resText.length; t++){
-      if(/omit_cat_shit/.test(resText[t].outerHTML)) resText[t].addEventListener("click", openChatAuthor);
+      if(/omit_cat_shit/.test(resText[t].outerHTML)) cn(resText[t],"chat-line__username")[0].addEventListener("click", openChatAuthor);
     }
   }
 }
