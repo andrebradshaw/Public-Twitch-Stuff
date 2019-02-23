@@ -48,7 +48,9 @@ var domObserver = new MutationObserver(() => {
   chatArr = unqObj(chatArr);
   var chatterText = cn(document, 'text-fragment');
   for(t=0; t<chatterText.length; t++){
-	chatterText[t].addEventListener("click", atChat);
+    if(/omit_cat_shit/.test(chatterText[t].outerHTML) === false) {
+	  chatterText[t].addEventListener("click", atChat);
+    }
   }
 });
 
@@ -275,6 +277,10 @@ function atChat(){
   document.getElementsByTagName('textarea')[0].value = '@' + this.parentElement.innerText.replace(/:.+/g, '') + ' ';
   document.getElementsByTagName('textarea')[0].focus();
 }
+function atChatSearch(){
+  document.getElementsByTagName('textarea')[0].value = '@' + this.innerText.replace(/:.+/g, '') + ' ';
+  document.getElementsByTagName('textarea')[0].focus();
+}
 function searchChat() {
   clearSearchRes();
   createResDivs(textbox_1, 3);
@@ -327,19 +333,19 @@ function createResDivs(obj, n){
     for(t=0; t<resText.length; t++){
       if(/omit_cat_shit/.test(resText[t].outerHTML)) {
 		cn(resText[t],"chat-line__username")[0].addEventListener("click", openChatAuthor);
-		resText[t].addEventListener("click", atChat);
+		resText[t].addEventListener("click", atChatSearch);
       }
     }
 
   }
 }
 
+
 cDiv.addEventListener('mouseover', expander);
 mDiv.addEventListener('mouseout', nodrag);
 mDiv.addEventListener('mouseover', dragElement);
 evalBtn.addEventListener("click", searchChat);
 clsBtn.addEventListener("click", close);
-expBtn.addEventListener("click", expandPop);
 dlBtn.addEventListener("click", dlFileName);
 textbox_1.addEventListener("keyup", searchChat);
 textbox_2.addEventListener("keyup", searchChat);
