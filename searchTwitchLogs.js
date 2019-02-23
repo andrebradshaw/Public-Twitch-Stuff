@@ -181,29 +181,6 @@ clsBtn.style.fontFamily = '"Courier New", monospace';
 clsBtn.style.fontWeight = "bold";
 clsBtn.style.color = "Crimson";
 
-var expBtn = document.createElement("button");
-document.getElementById("mover_div").appendChild(expBtn);
-expBtn.setAttribute("id", "btn_expand");
-document.getElementById("btn_expand").innerText = "-";
-expBtn.style.position = "absolute";
-expBtn.style.background = "transparent";
-expBtn.style.height = "0px";
-expBtn.style.width = "0px";
-expBtn.style.display = "inline-block";
-expBtn.style.transform = "scale(3.9, 3.9) translate(11px, -10px) rotate(0deg)";
-expBtn.style.fontSize = "1.2em";
-expBtn.style.borderRadius = "1em";
-expBtn.style.padding = "0px";
-expBtn.style.boxShadow = "0px";
-expBtn.style.border = "0px";
-expBtn.style.cursor = "pointer";
-expBtn.style.userSelect = "none";
-expBtn.style.fontSize = '1em';
-expBtn.style.fontFamily = '"Courier New", monospace';
-expBtn.style.fontWeight = "bold";
-expBtn.style.align = "right";
-expBtn.style.color = "lightgrey";
-
 var textbox_1 = document.createElement("input");
 textbox_1.setAttribute("id", "textbox_code");
 textbox_1.setAttribute("placeholder", "search text");
@@ -294,6 +271,15 @@ cDiv.style.width = "16%";
 	}
 }
 
+function atChat(){
+  document.getElementsByTagName('textarea')[0].value = '@' + this.parentElement.innerText.replace(/:.+/g, '') + ' ';
+  document.getElementsByTagName('textarea')[0].focus();
+}
+function searchChat() {
+  clearSearchRes();
+  createResDivs(textbox_1, 3);
+  createResDivs(textbox_2, 1);
+}
 
 function createResDivs(obj, n){
   if (obj.value.length > 2) {
@@ -347,17 +333,6 @@ function createResDivs(obj, n){
 
   }
 }
-
-function atChat(){
-  document.getElementsByTagName('textarea')[0].value = '@' + this.parentElement.innerText.replace(/:.+/g, '');
-  document.getElementsByTagName('textarea')[0].focus();
-}
-function searchChat() {
-  clearSearchRes();
-  createResDivs(textbox_1, 3);
-  createResDivs(textbox_2, 1);
-}
-
 
 cDiv.addEventListener('mouseover', expander);
 mDiv.addEventListener('mouseout', nodrag);
