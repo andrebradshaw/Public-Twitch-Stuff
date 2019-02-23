@@ -1,4 +1,3 @@
-
 function checker(elm, type){
   if (elm != undefined) {
     if (type == 'click') return elm.click();
@@ -17,7 +16,7 @@ var tn = (ob, nm) => ob.getElementsByTagName(nm);
 var nm = (ob, nm) => ob.getElementsByName(nm);
 
 function openChatAuthor(){
-	var path = cn(this, 'chat-author__display-name')[0].getAttribute('data-a-user');
+	var path = cn(this, 'chat-author__display-name')[0].getAttribute('data-a-user');	
 	window.open('https://www.twitch.tv/'+path);
 }
 
@@ -333,17 +332,20 @@ function createResDivs(obj, n){
         document.getElementById("pop_container").removeChild(document.getElementById('resultsBox'));
       }
     });
+
     var resText = cn(document, 'chat-line__message');
     for(t=0; t<resText.length; t++){
       if(/omit_cat_shit/.test(resText[t].outerHTML)) {
 		cn(resText[t],"chat-line__username")[0].addEventListener("click", openChatAuthor);
-		cn(resText[t],"chat-line__username")[0].addEventListener("mouseover", atChat);
+		resText[t].addEventListener("click", atChat);
       }
     }
+
   }
 }
 function atChat(){
-	document.getElementsByTagName('textarea')[0].value = '@' + this.innerText;
+  document.getElementsByTagName('textarea')[0].value = '@' + this.innerText.replace(/:.+/g, '');
+  document.getElementsByTagName('textarea')[0].focus();
 }
 function searchChat() {
   clearSearchRes();
