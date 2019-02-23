@@ -1,4 +1,3 @@
-
 function checker(elm, type){
   if (elm != undefined) {
     if (type == 'click') return elm.click();
@@ -47,6 +46,10 @@ var domObserver = new MutationObserver(() => {
   var lastChat = chats[chats.length - 1];
   chatArr.push(lastChat);
   chatArr = unqObj(chatArr);
+  var chatterText = cn(document, 'text-fragment');
+  for(t=0; t<chatterText.length; t++){
+	chatterText[t].addEventListener("click", atChat);
+  }
 });
 
 domObserver.observe(document.getElementById('chat_window_ob'), {
@@ -345,10 +348,6 @@ function createResDivs(obj, n){
   }
 }
 
-var chatterText = cn(document, 'text-fragment');
-for(t=0; t<chatterText.length; t++){
-	chatterText[t].addEventListener("click", atChat);
-}
 function atChat(){
   document.getElementsByTagName('textarea')[0].value = '@' + this.parentElement.innerText.replace(/:.+/g, '');
   document.getElementsByTagName('textarea')[0].focus();
