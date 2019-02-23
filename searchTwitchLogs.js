@@ -1,3 +1,4 @@
+
 function checker(elm, type){
   if (elm != undefined) {
     if (type == 'click') return elm.click();
@@ -334,16 +335,21 @@ function createResDivs(obj, n){
     });
     var resText = cn(document, 'chat-line__message');
     for(t=0; t<resText.length; t++){
-      if(/omit_cat_shit/.test(resText[t].outerHTML)) cn(resText[t],"chat-line__username")[0].addEventListener("click", openChatAuthor);
+      if(/omit_cat_shit/.test(resText[t].outerHTML)) {
+		cn(resText[t],"chat-line__username")[0].addEventListener("click", openChatAuthor);
+		cn(resText[t],"chat-line__username")[0].addEventListener("mouseover", atChat);
+      }
     }
   }
+}
+function atChat(){
+	document.getElementsByTagName('textarea')[0].value = '@' + this.innerText;
 }
 function searchChat() {
   clearSearchRes();
   createResDivs(textbox_1, 3);
   createResDivs(textbox_2, 1);
 }
-
 
 
 cDiv.addEventListener('mouseover', expander);
