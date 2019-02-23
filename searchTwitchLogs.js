@@ -1,3 +1,4 @@
+
 function checker(elm, type){
   if (elm != undefined) {
     if (type == 'click') return elm.click();
@@ -343,8 +344,13 @@ function createResDivs(obj, n){
 
   }
 }
+
+var chatterText = cn(document, 'text-fragment');
+for(t=0; t<chatterText.length; t++){
+	chatterText[t].addEventListener("click", atChat);
+}
 function atChat(){
-  document.getElementsByTagName('textarea')[0].value = '@' + this.innerText.replace(/:.+/g, '');
+  document.getElementsByTagName('textarea')[0].value = '@' + this.parentElement.innerText.replace(/:.+/g, '');
   document.getElementsByTagName('textarea')[0].focus();
 }
 function searchChat() {
