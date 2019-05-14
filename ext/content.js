@@ -1,3 +1,8 @@
+var reg = (o, n) => o ? o[n] : '';
+var cn = (o, s) => o ? o.getElementsByClassName(s) : console.log(o);
+var tn = (o, s) => o ? o.getElementsByTagName(s) : console.log(o);
+var gi = (o, s) => o ? o.getElementById(s) : console.log(o);
+
 async function initTwitcher() {
   function checker(elm, type) {
     if (elm != undefined) {
@@ -11,10 +16,6 @@ async function initTwitcher() {
     }
   }
 
-  var reg = (o, n) => o ? o[n] : '';
-  var cn = (o, s) => o ? o.getElementsByClassName(s) : console.log(o);
-  var tn = (o, s) => o ? o.getElementsByTagName(s) : console.log(o);
-  var gi = (o, s) => o ? o.getElementById(s) : console.log(o);
   var noHTML = (s) => s.replace(/<.+?>/g, '').replace(/\s+/g, ' ').replace(/&.+?;/g, '');
   var delay = (ms) => new Promise(res => setTimeout(res, ms));
   var cleanName = (s) => s.replace(/(?<=^.+?)\s+-\s+.+|(?<=^.+?)\s*[sSJj][Rr].+|(?<=^.+?)\s*(III|IV|II).*|(?<=^.+?)\b,.*|(?<=^.+?)\s*\(.*/, '');
@@ -387,4 +388,4 @@ async function initTwitcher() {
   textbox_1.addEventListener("keyup", searchChat);
   textbox_2.addEventListener("keyup", searchChat);
 }
-initTwitcher()
+if(/twitch.tv/.test(window.location.href) && cn(document, 'tw-flex-grow-1 tw-full-height tw-pd-b-1')[0]) initTwitcher()
