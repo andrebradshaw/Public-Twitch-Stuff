@@ -82,7 +82,7 @@ async function initTwitcher() {
   }
 
   function switchRankText() {
-    var updated = '<table>';
+    var updated = '<table><tr style="border: 2px solid rgb(94, 47, 147)"><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Candidate</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Bit Rank</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Needed</td></tr>';
     var chats2020 = Array.from(cn(document, 'chat-line__message')).filter(el => /You can vote with bits or tips for the following options:/.test(el.innerText));
     if (chats2020.length > 0) {
       var lastChat2020 = chats2020[chats2020.length - 1];
