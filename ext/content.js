@@ -26,7 +26,7 @@ async function initTwitcher() {
   var formatNum = (n) => n ? '</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1.1em; text-align: right;"> ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '</td><td style="padding: 1px; border: 2px solid rgb(94, 47, 147); font-size: .9em; text-align: right;"> ' + 'FeelsBadMan';
 
   await delay(2000);
-  var currul = window.location.href;
+
   function openChatAuthor() {
     var path = cn(this, 'chat-author__display-name')[0].getAttribute('data-a-user');
     window.open('https://www.twitch.tv/' + path);
@@ -87,7 +87,7 @@ async function initTwitcher() {
         chatterText[t].addEventListener("click", atChat);
       }
     }
-    if (/twitch\.tv\/imreallyimportant/.test(cururl)) switchRankText();
+    if (/twitch\.tv\/imreallyimportant/.test(window.location.href)) switchRankText();
   });
 
   domo.observe(cn(document, 'tw-flex-grow-1 tw-full-height tw-pd-b-1')[0], {
