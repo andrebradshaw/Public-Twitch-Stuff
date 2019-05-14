@@ -25,6 +25,27 @@ async function initTwitcher() {
   var fixDate = (s) => s ? s.replace(/[a-zA-Z]+/, s.replace(/(?<=[a-zA-Z]{3}).+/g, '')) : '';
   var formatNum = (n) => n ? '</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1.1em; text-align: right;"> ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '</td><td style="padding: 1px; border: 2px solid rgb(94, 47, 147); font-size: .9em; text-align: right;"> ' + 'FeelsBadMan';
 
+  function indexOfLowestRanked(arr, start) {
+    for (var i = (start - 2); i > 0; i--) {
+      if (arr[i][1] > 0) return i;
+    }
+  }
+
+  function createNextRank(arr) {
+    var temp = [];
+    for (var i = 0; i < arr.length; i++) {
+      var name = arr[i][0];
+      var bits = arr[i][1];
+      if (i == 0) {
+        temp.push([name, bits, '0']);
+      } else {
+        var nextRank = arr[i - 1][1] - bits ? arr[i - 1][1] - bits : arr[indexOfLowestRanked(arr, i)][1] - bits;
+        temp.push([name, bits, nextRank]);
+      }
+    }
+    return temp;
+  }
+
   await delay(2000);
 
   function openChatAuthor() {
@@ -56,8 +77,8 @@ async function initTwitcher() {
 
   function quickRank(input) {
     var xs = /(\w+)\((\d+)/;
-    var array = input.split(',').map(el => [reg(xs.exec(el), 1), parseInt(reg(xs.exec(el), 2))]).sort((a, b) => b[1] - a[1]);
-    return array;
+    var arrg = input.split(',').map(el => [reg(xs.exec(el), 1), parseInt(reg(xs.exec(el), 2))]).sort((a, b) => b[1] - a[1]);
+    return createNextRank(arrg);
   }
 
   function switchRankText() {
@@ -67,7 +88,7 @@ async function initTwitcher() {
       var lastChat2020 = chats2020[chats2020.length - 1];
       var ranked = quickRank(lastChat2020.innerText);
       ranked.forEach(el => {
-        updated = updated + '<tr style="border: 2px solid rgb(94, 47, 147)"><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1.1em; text-align: left;">' + fixCase(el[0]) + formatNum(el[1]) + '</td>' + '</tr>'
+        updated = updated + '<tr style="border: 2px solid rgb(94, 47, 147)"><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1.1em; text-align: left;">' + fixCase(el[0]) + formatNum(el[1]) + formatNum(el[2]) + '</td>' + '</tr>'
       });
       chats2020[chats2020.length - 1].innerHTML = updated + '</table>';
     }
@@ -388,4 +409,4 @@ async function initTwitcher() {
   textbox_1.addEventListener("keyup", searchChat);
   textbox_2.addEventListener("keyup", searchChat);
 }
-if(/twitch.tv/.test(window.location.href) && cn(document, 'tw-flex-grow-1 tw-full-height tw-pd-b-1')[0]) initTwitcher()
+if (/twitch.tv/.test(window.location.href) && cn(document, 'tw-flex-grow-1 tw-full-height tw-pd-b-1')[0]) initTwitcher()
