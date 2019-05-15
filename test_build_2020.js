@@ -23,10 +23,10 @@ function createNextRank(arr){
     var name = arr[i][0];
     var bits = arr[i][1];
     if(i == 0){
-      temp.push([name,bits,'0']);
+      temp.push([name,bits,'0',i.toString()]);
     }else{
       var nextRank = arr[i-1][1]-bits ? arr[i-1][1]-bits : arr[indexOfLowestRanked(arr,i)][1]-bits;
-      temp.push([name,bits,nextRank]);
+      temp.push([name,bits,nextRank,i.toString()]);
     }
   }
   return temp;
@@ -47,7 +47,7 @@ function switchRankText(){
   document.body.appendChild(chatbox);
   var updated = '<table><tr style="border: 2px solid rgb(94, 47, 147)"><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Candidate</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Bit Rank</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Needed</td></tr>';
   var ranked = quickRank();
-  ranked.forEach(el=> {updated = updated + '<tr style="border: 2px solid rgb(94, 47, 147)"><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1.1em; text-align: left;">'+fixCase(el[0])+formatNum(el[1])+formatNum(el[2]) +'</td></tr>'});
+  ranked.forEach(el=> {updated = updated + '<tr style="border: 2px solid rgb(94, 47, 147)">'+formatNum(el[3])+'<td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1.1em; text-align: left;">'+fixCase(el[0])+formatNum(el[1])+formatNum(el[2])+'</td></tr>'});
   chatbox.innerHTML = updated+'</table>';
 }
 switchRankText()
