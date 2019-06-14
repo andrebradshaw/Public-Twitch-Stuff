@@ -855,7 +855,6 @@ d,b,c){return b*(a/=c)*a*a*a+d}}},ia={drawMarker:function(a,d,b,c,e,g,k,l){if(b)
 0.15,b.strokeStyle="black",b.stroke(),b.globalAlpha=p))):"triangle"===c?(b.beginPath(),b.moveTo(a-e/2,d+e/2),b.lineTo(a+e/2,d+e/2),b.lineTo(a,d-e/2),b.closePath(),g&&b.fill(),l&&(k?b.stroke():(p=b.globalAlpha,b.globalAlpha=0.15,b.strokeStyle="black",b.stroke(),b.globalAlpha=p)),b.beginPath()):"cross"===c&&(b.strokeStyle=g,b.lineWidth=e/4,b.beginPath(),b.moveTo(a-e/2,d-e/2),b.lineTo(a+e/2,d+e/2),b.stroke(),b.moveTo(a+e/2,d-e/2),b.lineTo(a-e/2,d+e/2),b.stroke())}},drawMarkers:function(a){for(var d=
 0;d<a.length;d++){var b=a[d];ia.drawMarker(b.x,b.y,b.ctx,b.type,b.size,b.color,b.borderColor,b.borderThickness)}}};return p}();Na.Chart.version="v2.3.1 GA"})();
 
-
 var reg = (o, n) => o ? o[n] : '';
 var cn = (o, s) => o ? o.getElementsByClassName(s) : console.log(o);
 var tn = (o, s) => o ? o.getElementsByTagName(s) : console.log(o);
@@ -863,56 +862,136 @@ var gi = (o, s) => o ? o.getElementById(s) : console.log(o);
 
 var unq = (arr) => arr.filter((e, p, a) => a.indexOf(e) == p);
 
-var parseIfNum = (s)=> /^[\d+|$|\.|,|-]+$/.test(s) && /\d-\d/.test(s) === false ? parseFloat(s.replace(/\$|,/g,'')) : s;
+var parseIfNum = (s) => /^[\d+|$|\.|,|-]+$/.test(s) && /\d-\d/.test(s) === false ? parseFloat(s.replace(/\$|,/g, '')) : s;
 
 var ele = (t) => document.createElement(t);
 var attr = (o, k, v) => o.setAttribute(k, v);
 
-var doc = document;
+var fixCase = (s) => s.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 
-var webtable = tn(doc,'table');
+var formatNum = (n) => n ? '</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1.1em; text-align: right;"> ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '</td><td style="padding: 1px; border: 2px solid rgb(94, 47, 147); font-size: .9em; text-align: right;"> ' + 'FeelsBadMan';
 
-var siteTables = [];
+function hoverSwitch() {
+  var back = this.style.background;
+  var colr = this.style.color;
+  this.style.background = colr;
+  this.style.color = back;
+  this.style.transition = "all 173ms";
+} /*global button animator*/
 
-for(var i=0; i<webtable.length; i++){
-  var rows = Array.from(tn(webtable[i],'tr')).map(tr=> Array.from(tn(tr,'td')).map(td=> td.innerText.replace(/\n/g,' '))).filter(el=> el.length > 0);
-  var head = Array.from(tn(webtable[i],'tr')).map(tr=> Array.from(tn(tr,'th')).map(td=> td.innerText.replace(/\n/g,' '))).filter(el=> el.length > 0);
-  var tbod = head.concat(rows);
-  siteTables.push(tbod);
+function runTableConvert() {
+  function quickRank(input) {
+    var xs = /(\w+)\((\d+)/;
+    var arrg = input.split(',').map(el => [reg(xs.exec(el), 1), parseInt(reg(xs.exec(el), 2))]).sort((a, b) => b[1] - a[1]);
+    return createNextRank(arrg);
+  }
+
+  function indexOfLowestRanked(arr, start) {
+    for (var i = (start - 2); i > 0; i--) {
+      if (arr[i][1] > 0) return i;
+    }
+  }
+
+  function createNextRank(arr) {
+    var temp = [];
+    for (var i = 0; i < arr.length; i++) {
+      var name = arr[i][0];
+      var bits = arr[i][1];
+      if (i == 0) {
+        temp.push([name, bits, '0']);
+      } else {
+        var nextRank = arr[i - 1][1] - bits ? arr[i - 1][1] - bits : arr[indexOfLowestRanked(arr, i)][1] - bits;
+        temp.push([name, bits, nextRank]);
+      }
+    }
+    return temp;
+  }
+
+  function switchRankText() {
+    var updated = '<table><tr style="border: 2px solid rgb(94, 47, 147)"><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Candidate</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Bit Rank</td><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1em; text-align: center;">Needed</td></tr>';
+    var chats2020 = Array.from(cn(document, 'chat-line__message')).filter(el => /You can vote with bits or tips for the following options:/.test(el.innerText));
+    if (chats2020.length > 0) {
+      var lastChat2020 = chats2020[chats2020.length - 1];
+      var ranked = quickRank(lastChat2020.innerText);
+      ranked.forEach(el => {
+        updated = updated + '<tr style="border: 2px solid rgb(94, 47, 147)"><td style="padding: 0.5px; border: 2px solid rgb(94, 47, 147); font-size: 1.1em; text-align: left;">' + fixCase(el[0]) + formatNum(el[1]) + formatNum(el[2]) + '</td>' + '</tr>'
+      });
+      chats2020[chats2020.length - 1].innerHTML = updated + '</table>';
+
+      var tSwitch = ele('div');
+      chats2020[chats2020.length - 1].appendChild(tSwitch);
+      tSwitch.addEventListener('click', convertTable2Pie);
+      tSwitch.addEventListener('mouseover', hoverSwitch);
+      tSwitch.addEventListener('mouseout', hoverSwitch);
+      tSwitch.innerText = 'Switch to Pie Chart';
+      attr(tSwitch, 'style', 'width: 50%; background: #fff; color: rgb(94, 47, 147); border: 2px solid rgb(94, 47, 147); cursor: pointer; padding: 0.5px; text-align: center;');
+    }
+  }
+  switchRankText();
+  var domo = new MutationObserver(() => {
+    if (/twitch\.tv\/imreallyimportant/.test(window.location.href)) switchRankText();
+  });
+  domo.observe(cn(document, 'tw-flex-grow-1 tw-full-height tw-pd-b-1')[0], {
+    childList: true,
+    subtree: true
+  });
+
+
+  function convertTable2Pie() {
+    var doc = document;
+
+    var webtable = tn(this.parentElement, 'table');
+
+    var siteTables = [];
+
+    for (var i = 0; i < webtable.length; i++) {
+      var rows = Array.from(tn(webtable[i], 'tr')).map(tr => Array.from(tn(tr, 'td')).map(td => td.innerText.replace(/\n/g, ' '))).filter(el => el.length > 0);
+      var head = Array.from(tn(webtable[i], 'tr')).map(tr => Array.from(tn(tr, 'th')).map(td => td.innerText.replace(/\n/g, ' '))).filter(el => el.length > 0);
+      var tbod = head.concat(rows);
+      siteTables.push(tbod);
+    }
+
+    var hasVotesTable = siteTables[0].map(el => [el[0], parseIfNum(el[1])]).filter(el => Number.isInteger(el[1]));
+
+    var total = hasVotesTable.map(i => i[1]).reduce((a, b) => a + b);
+    var objArr = [];
+
+    for (var i = 0; i < hasVotesTable.length; i++) {
+      objArr.push({
+        y: (Math.round((hasVotesTable[i][1] / total) * 10000) / 100),
+        label: hasVotesTable[i][0]
+      });
+    }
+
+    var objOut = objArr.filter(i => i.y);
+
+    webtable[0].outerHTML = '<div id="chartContainer" style="height: 370px; width: 100%;"></div>';
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+      theme: "light2",
+      data: [{
+        type: "pie",
+        indexLabelFontSize: 9,
+        radius: 70,
+        indexLabel: "{label} - {y}",
+        yValueFormatString: "###0.0\"%\"",
+        click: explodePie,
+        dataPoints: objOut
+      }]
+    });
+    chart.render();
+
+    function explodePie(e) {
+      for (var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+        if (i !== e.dataPointIndex)
+          e.dataSeries.dataPoints[i].exploded = false;
+      }
+    }
+
+    cn(document, 'canvasjs-chart-credit')[0].outerHTML = '';
+    this.outerHTML = '';
+
+  }
+
 }
-
-var hasVotesTable = siteTables[0].map(el=> [el[0],parseIfNum(el[1])]).filter(el=> Number.isInteger(el[1]) );
-
-var total = hasVotesTable.map(i=> i[1]).reduce((a,b)=> a + b);
-var objArr = [];
-
-for(var i=0; i<hasVotesTable.length; i++){
-   objArr.push({y: (Math.round((hasVotesTable[i][1]/total) * 10000) / 100), label: hasVotesTable[i][0]});
-}
-
-var objOut = objArr.filter(i=> i.y);
-
-webtable[0].outerHTML = '<div id="chartContainer" style="height: 370px; width: 100%;"></div>';
-
-var chart = new CanvasJS.Chart("chartContainer", {
-	theme: "light2",
-	data: [{
-		type: "pie",
-		indexLabelFontSize: 9,
-		radius: 70,
-		indexLabel: "{label} - {y}",
-		yValueFormatString: "###0.0\"%\"",
-		click: explodePie,
-		dataPoints: objOut
-	}]
-});
-chart.render();
-
-function explodePie(e) {
-	for(var i = 0; i < e.dataSeries.dataPoints.length; i++) {
-		if(i !== e.dataPointIndex)
-			e.dataSeries.dataPoints[i].exploded = false;
-	}
-}
-
-cn(document,'canvasjs-chart-credit')[0].outerHTML = '';
+runTableConvert();
