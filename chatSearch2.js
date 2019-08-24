@@ -116,8 +116,7 @@ function boolswitch() {
     attr(cir,'status','pos');
     txt.style.color = '#4d7828';
   }
-  search() //this runs because a switch in data is requested NOT
-}
+  search();
 
 function closeView() {
   this.parentElement.parentElement.outerHTML = '';
@@ -126,9 +125,9 @@ function closeView() {
 function search(){
   var searchInput = gi(document,'saved_msg_search_input');
   var str = searchInput.value.trim();
-  if(str.length > 2){/* && e.key == 'Enter' */
+  if(str.length > 2){
     var arr = gi(document,'circleSwitchStatus').getAttribute('status') == 'pos' ? currentChatText.filter(el=> booleanSearch(str,el) || booleanSearch(str,el)) : currentChatText.filter(el=> booleanSearch(str,el) === false && booleanSearch(str,el) === false);
-    creatSearchResultsHTML(this.parentElement.parentElement,parseChatterObj(arr));
+    creatSearchResultsHTML(parseChatterObj(arr));
   }
 }
 
@@ -155,20 +154,23 @@ function createChatSearchHTML(){
 
     var cls = ele('div');
     head.appendChild(cls);
-    attr(cls, 'style', 'grid-area: 1 / 2; width: 24px; height: 24px; cursor: pointer; transform: translate(0px, 0px);');
+    attr(cls, 'style', 'grid-area: 1 / 2; width: 27px; height: 27px; cursor: pointer;');
     cls.innerHTML = `<svg x="0px" y="0px" viewBox="0 0 100 100">
 <g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" id="close-layer-1" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" id="close-layer-2" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`;
     cls.onmouseenter = aninCloseBtn;
     cls.onmouseleave = anoutCloseBtn;
     cls.onclick = closeView;
 
-    var c_bod = ele('div'); /* content body */
-    cont.appendChild(c_bod);
+    var c_bod = ele('div'); 
     attr(c_bod,'style',`display: grid; grid-template-columns: 95% 5%; grid-gap: 0%; justify-content: space-between; background: ${t_color.navyPurple}; color: ${t_color.navyPurple}; border: 1.2px solid ${t_color.purpleBlack}; border-bottom-left-radius: .3em; border-bottom-right-radius: .3em; padding: 6px;`);
     attr(c_bod,'id','saved_msg_content_container');
+    cont.appendChild(c_bod);
 
+    var r_bod = ele('div');
+    attr(r_bod,'id','res_content_container');
+    cont.appendChild(r_bod);
 
-    var input_cont = ele('div'); /*grid container for search input -- allowing for search mod btns [regx vs boolean] || [+|i]*/
+    var input_cont = ele('div');
     attr(input_cont,'style','width: 100%; max-height: 30px; display: grid; grid-template-columns: 92% minmax(13px, 16px); grid-gap: 1px; justify-content: center; background: transparent; padding: 6px;');
     attr(input_cont,'id','saved_msg_input_container');
     c_bod.appendChild(input_cont);
@@ -182,32 +184,33 @@ function createChatSearchHTML(){
 
         var bool_sw = ele('div');
         attr(bool_sw,'style','grid-area: 1 / 2; padding 2px;');
-        bool_sw.style.transform = 'rotate(90deg)';//translate(-50%, -4%) 
+        bool_sw.style.transform = 'rotate(90deg)';
         bool_sw.style.width = '150%';
         bool_sw.style.maxHeight = '110%';
         bool_sw.innerHTML = `<svg id="posicon_bool_switch" x="0px" y="0px" viewBox="0 0 58 26">
       <path style="fill:${t_color.purple};stroke:#7c7c7c;stroke-width:0.3;stroke-linecap:round;" d="M45,26H13C5.85,26,0,20.15,0,13v0C0,5.85,5.85,0,13,0h32c7.15,0,13,5.85,13,13v0  C58,20.15,52.15,26,45,26z" /><circle id="circleSwitchStatus" status="pos" style="fill:#88C057; stroke:#659C35; stroke-width:2; stroke-linecap:round; stroke-miterlimit:10;" cx="45" cy="13" r="9" />
     </svg>`;
-        bool_sw.onclick = boolswitch; //this also runs search()
+        bool_sw.onclick = boolswitch;
         input_cont.appendChild(bool_sw);
 
 }
-function creatSearchResultsHTML(parent,arr){
-  if(gi(document,'search-results-list')) gi(document,'search-results-list').outerHTML = '';
+function creatSearchResultsHTML(arr){
+  var parent = gi(document,'res_content_container');
+  gi(document,'res_content_container').innerHTML = '';
+  if(arr.length > 7) {attr(parent,'style',`height: 600px; overflow-y: scroll;`);}else{attr(parent,'style',`height: 600px; overflow-y: hidden;`);}
+  for(var i=0; i<arr.length; i++){
     var searchResCont = ele('div'); 
-    attr(searchResCont,'id','search-results-list');
-    attr(searchResCont,'style','width: 100%; display: grid; grid-template-columns: 35% 65%; grid-gap: 1px; justify-content: center; background: transparent; padding: 6px;');
-    attr(searchResCont,'id','saved_msg_input_container');
+    attr(searchResCont,'class','search-results-list');
+    attr(searchResCont,'style',`width: 100%; background: ${t_color.navyPurple}; padding: 6px;`);
     parent.appendChild(searchResCont);
 
-	for(var i=0; i<arr.length; i++){
-        var user= ele('div');
-        attr(user,'style',`grid-area: 1 / 1; padding 2px; color: ${t_color.purpleLightGrey};`);
-        user.innerText = arr[i].user;
+        var user= ele('span');
+        attr(user,'style',`padding 2px; color: ${t_color.purpleLightGrey};`);
+        user.innerText = arr[i].user+': ';
  		searchResCont.appendChild(user);
 
-        var chat= ele('div');
-        attr(chat,'style',`grid-area: 1 / 2; padding 2px; color: ${t_color.purpleLightGrey};`);
+        var chat= ele('span');
+        attr(chat,'style',`padding 2px; color: ${t_color.purpleLightGrey};`);
         chat.innerText = arr[i].chat;
  		searchResCont.appendChild(chat);
     }
@@ -223,5 +226,3 @@ function parseChatterObj(arr){
 }
 
 createChatSearchHTML()
-console.log()
-// chatterData
