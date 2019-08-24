@@ -117,6 +117,7 @@ function boolswitch() {
     txt.style.color = '#4d7828';
   }
   search();
+}
 
 function closeView() {
   this.parentElement.parentElement.outerHTML = '';
@@ -134,7 +135,6 @@ function search(){
 var t_color = {purpleBlack: '#0f0e11', navyPurple: '#19171c', darkPurple: '#2c2541', purpleLightGrey: '#dad8de', purple: '#392e5c', lightPurple: '#7d5bbe', brightPurple: '#885dd9'};
 
 function createChatSearchHTML(){
-
   if (gi(document, 'saved_msg_search_cont')) gi(document, 'saved_msg_search_cont').outerHTML = "";
 
   var cont = ele('div');
@@ -194,6 +194,7 @@ function createChatSearchHTML(){
         input_cont.appendChild(bool_sw);
 
 }
+
 function creatSearchResultsHTML(arr){
   var parent = gi(document,'res_content_container');
   gi(document,'res_content_container').innerHTML = '';
