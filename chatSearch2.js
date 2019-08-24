@@ -9,15 +9,51 @@ var ele = (t) => document.createElement(t);
 var attr = (o, k, v) => o.setAttribute(k, v);
 var reChar = (s) => s.match(/&#.+?;/g) && s.match(/&#.+?;/g).length > 0 ? s.match(/&#.+?;/g).map(el=> [el,String.fromCharCode(/d+/.exec(el)[0])]).map(m=> s = s.replace(new RegExp(m[0], 'i'), m[1])).pop() : s;
 
+var booleanSearch = (bool, target) => parseAsRegexArr(bool).every(x=> x.test(target));
+
 var currentChats = Array.from(cn(document,'chat-line__message'));
 
-var currentChatText = currentChats.map(el=> unq(Array.from(tn(el,'span')).map(t=> t.innerText).filter(i=> i != '')).reduce((a,b)=> a+b));
+var currentChatText = currentChats.map(el=> unqHsh(Array.from(tn(el,'span')).map(t=> t.innerText).filter(i=> i != ''),{}).reduce((a,b)=> a+b));
+
 
 var chatterData = currentChats.map(el=> cn(el,'chat-author__display-name')[0].innerText + cn(el,'chat-author__display-name')[0].style.cssText.replace(/color/,''));
 
-var chatObject = parseChatterObj(currentChatText);
+function parseChatterObj(arr){
+  return arr.map(el=> {
+	return {
+		user: reg(/.+?(?=:)/.exec(el),0),
+		chat: reg(/(?<=:\s+).+/.exec(el),0)
+    }
+  });
+}
 
-var booleanSearch = (bool, target) => parseAsRegexArr(bool).every(x=> x.test(target));
+function addNewChats(){
+    var chats = Array.from(cn(document,'chat-line__message')).map(el=> unqHsh(Array.from(tn(el,'span')).map(t=> t.innerText).filter(i=> i != ''),{}).reduce((a,b)=> a+b));
+    for(c=0; c<chats.length; c++){
+      currentChatText.push(chats[c]);
+    }
+    currentChatText = unqHsh(currentChatText,{});
+}
+
+function addNewUsers(){
+  var userData = Array.from(cn(document,'chat-line__message')).map(el=> cn(el,'chat-author__display-name')[0].innerText + cn(el,'chat-author__display-name')[0].style.cssText.replace(/color/,''));
+  for(c=0; c<userData.length; c++){
+    chatterData.push(userData[c]);
+  }
+  unqHsh(chatterData,{});
+}
+
+var domObserver = new MutationObserver(() => {
+  var chatterData = currentChats.map(el=> cn(el,'chat-author__display-name')[0].innerText + cn(el,'chat-author__display-name')[0].style.cssText.replace(/color/,''));
+  addNewChats();
+  addNewUsers();
+});
+
+domObserver.observe(cn(document,'chat-room tw-flex tw-flex-column tw-flex-grow-1 tw-flex-shrink-1 tw-full-width')[0], {
+  childList: true,
+  subtree: true
+});
+
 
 function parseAsRegexArr(bool) {
   if (typeof bool == 'object') {
@@ -128,7 +164,7 @@ function search(){
   var str = searchInput.value.trim();
   if(str.length > 2){
     var arr = gi(document,'circleSwitchStatus').getAttribute('status') == 'pos' ? currentChatText.filter(el=> booleanSearch(str,el) || booleanSearch(str,el)) : currentChatText.filter(el=> booleanSearch(str,el) === false && booleanSearch(str,el) === false);
-    creatSearchResultsHTML(parseChatterObj(arr));
+    creatSearchResultsHTML(parseChatterObj(arr),parseChatterObj(chatterData));
   }
 }
 
@@ -162,7 +198,7 @@ function createChatSearchHTML(){
     cls.onclick = closeView;
 
     var c_bod = ele('div'); 
-    attr(c_bod,'style',`display: grid; grid-template-columns: 95% 5%; grid-gap: 0%; justify-content: space-between; background: ${t_color.navyPurple}; color: ${t_color.navyPurple}; border: 1.2px solid ${t_color.purpleBlack}; border-bottom-left-radius: .3em; border-bottom-right-radius: .3em; padding: 6px;`);
+    attr(c_bod,'style',`display: grid; grid-template-columns: 95% 5%; grid-gap: 0%; justify-content: space-between; background: ${t_color.navyPurple}; color: ${t_color.navyPurple}; border: 1.2px solid ${t_color.purpleBlack}; padding: 6px;`);
     attr(c_bod,'id','saved_msg_content_container');
     cont.appendChild(c_bod);
 
@@ -195,35 +231,27 @@ function createChatSearchHTML(){
 
 }
 
-function creatSearchResultsHTML(arr){
+function creatSearchResultsHTML(arr,users){
   var parent = gi(document,'res_content_container');
   gi(document,'res_content_container').innerHTML = '';
-  if(arr.length > 7) {attr(parent,'style',`height: 600px; overflow-y: scroll;`);}else{attr(parent,'style',`height: 600px; overflow-y: hidden;`);}
+  if(arr.length > 7) {attr(parent,'style',`max-height: 600px; overflow-y: scroll;`);}else{attr(parent,'style',`height: 600px; overflow-y: hidden;`);}
   for(var i=0; i<arr.length; i++){
     var searchResCont = ele('div'); 
     attr(searchResCont,'class','search-results-list');
-    attr(searchResCont,'style',`width: 100%; background: ${t_color.navyPurple}; padding: 6px;`);
+    attr(searchResCont,'style',`width: 100%; background: ${t_color.navyPurple}; padding: 10px;`);
     parent.appendChild(searchResCont);
 
+    var userColor = users.filter(el=> arr[i].user == el.user)[0].chat;
+
         var user= ele('span');
-        attr(user,'style',`padding 2px; color: ${t_color.purpleLightGrey};`);
+        attr(user,'style',`padding 2px; color: ${t_color.purpleLightGrey}; color: ${userColor}`);
         user.innerText = arr[i].user+': ';
  		searchResCont.appendChild(user);
 
         var chat= ele('span');
         attr(chat,'style',`padding 2px; color: ${t_color.purpleLightGrey};`);
-        chat.innerText = arr[i].chat;
+        chat.innerText = arr[i].chat.trim();
  		searchResCont.appendChild(chat);
     }
 }
-
-function parseChatterObj(arr){
-  return arr.map(el=> {
-	return {
-		user: reg(/.+?(?=:)/.exec(el),0),
-		chat: reg(/(?<=:\s+).+/.exec(el),0)
-    }
-  });
-}
-
 createChatSearchHTML()
