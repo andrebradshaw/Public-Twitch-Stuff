@@ -128,7 +128,7 @@ function search(){
   var str = searchInput.value.trim();
   if(str.length > 2){/* && e.key == 'Enter' */
     var arr = gi(document,'circleSwitchStatus').getAttribute('status') == 'pos' ? currentChatText.filter(el=> booleanSearch(str,el) || booleanSearch(str,el)) : currentChatText.filter(el=> booleanSearch(str,el) === false && booleanSearch(str,el) === false);
-    console.log(arr);
+    creatSearchResultsHTML(this.parentElement.parentElement,parseChatterObj(arr));
   }
 }
 
@@ -173,25 +173,44 @@ function createChatSearchHTML(){
     attr(input_cont,'id','saved_msg_input_container');
     c_bod.appendChild(input_cont);
 
-    var s_input = ele('input');
-    attr(s_input,'id','saved_msg_search_input');
-    attr(s_input,'placeholder','Search chat');
-    attr(s_input,'style',`background: ${t_color.navyPurple}; width: 100%; max-height: 24px; grid-area: 1 / 1; border: 1px solid ${t_color.purple}; border-radius: 0.25em; padding: 3px; color: #4d7828;`);
-    input_cont.appendChild(s_input);
-    s_input.onkeyup = search;
+        var s_input = ele('input');
+        attr(s_input,'id','saved_msg_search_input');
+        attr(s_input,'placeholder','Search chat');
+        attr(s_input,'style',`background: ${t_color.navyPurple}; width: 100%; max-height: 24px; grid-area: 1 / 1; border: 1px solid ${t_color.purple}; border-radius: 0.25em; padding: 3px; color: #4d7828;`);
+        input_cont.appendChild(s_input);
+        s_input.onkeyup = search;
 
-    var bool_sw = ele('div');
-    attr(bool_sw,'style','grid-area: 1 / 2; padding 2px;');
-    bool_sw.style.transform = 'rotate(90deg)';//translate(-50%, -4%) 
-    bool_sw.style.width = '150%';
-    bool_sw.style.maxHeight = '110%';
-    bool_sw.innerHTML = `<svg id="posicon_bool_switch" x="0px" y="0px" viewBox="0 0 58 26">
-  <path style="fill:${t_color.purple};stroke:#7c7c7c;stroke-width:0.3;stroke-linecap:round;" d="M45,26H13C5.85,26,0,20.15,0,13v0C0,5.85,5.85,0,13,0h32c7.15,0,13,5.85,13,13v0  C58,20.15,52.15,26,45,26z" />
-  <circle id="circleSwitchStatus" status="pos" style="fill:#88C057; stroke:#659C35; stroke-width:2; stroke-linecap:round; stroke-miterlimit:10;" cx="45" cy="13" r="9" />
-</svg>`;
-    bool_sw.onclick = boolswitch; //this also runs search()
-    input_cont.appendChild(bool_sw);
+        var bool_sw = ele('div');
+        attr(bool_sw,'style','grid-area: 1 / 2; padding 2px;');
+        bool_sw.style.transform = 'rotate(90deg)';//translate(-50%, -4%) 
+        bool_sw.style.width = '150%';
+        bool_sw.style.maxHeight = '110%';
+        bool_sw.innerHTML = `<svg id="posicon_bool_switch" x="0px" y="0px" viewBox="0 0 58 26">
+      <path style="fill:${t_color.purple};stroke:#7c7c7c;stroke-width:0.3;stroke-linecap:round;" d="M45,26H13C5.85,26,0,20.15,0,13v0C0,5.85,5.85,0,13,0h32c7.15,0,13,5.85,13,13v0  C58,20.15,52.15,26,45,26z" /><circle id="circleSwitchStatus" status="pos" style="fill:#88C057; stroke:#659C35; stroke-width:2; stroke-linecap:round; stroke-miterlimit:10;" cx="45" cy="13" r="9" />
+    </svg>`;
+        bool_sw.onclick = boolswitch; //this also runs search()
+        input_cont.appendChild(bool_sw);
 
+}
+function creatSearchResultsHTML(parent,arr){
+  if(gi(document,'search-results-list')) gi(document,'search-results-list').outerHTML = '';
+    var searchResCont = ele('div'); 
+    attr(searchResCont,'id','search-results-list');
+    attr(searchResCont,'style','width: 100%; display: grid; grid-template-columns: 35% 65%; grid-gap: 1px; justify-content: center; background: transparent; padding: 6px;');
+    attr(searchResCont,'id','saved_msg_input_container');
+    parent.appendChild(searchResCont);
+
+	for(var i=0; i<arr.length; i++){
+        var user= ele('div');
+        attr(user,'style',`grid-area: 1 / 1; padding 2px; color: ${t_color.purpleLightGrey};`);
+        user.innerText = arr[i].user;
+ 		searchResCont.appendChild(user);
+
+        var chat= ele('div');
+        attr(chat,'style',`grid-area: 1 / 2; padding 2px; color: ${t_color.purpleLightGrey};`);
+        chat.innerText = arr[i].chat;
+ 		searchResCont.appendChild(chat);
+    }
 }
 
 function parseChatterObj(arr){
