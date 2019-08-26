@@ -227,7 +227,7 @@ function createChatSearchHTML(){
 
     var cls = ele('div');
     head.appendChild(cls);
-    attr(cls, 'style', 'grid-area: 1 / 2; width: 27px; height: 27px; cursor: pointer;');
+    attr(cls, 'style', 'grid-area: 1 / 2; width: 27px; height: 27px; cursor: pointer; transform: scale(1.2, 1.2);');
     cls.innerHTML = svgs.close;
     cls.onmouseenter = aninCloseBtn;
     cls.onmouseleave = anoutCloseBtn;
@@ -275,7 +275,7 @@ function creatSearchResultsHTML(arr,users,ats){
 
   var resHead = {
     tag: 'div',
-    attr: {style: `display: grid; grid-template-columns: 95% 5%; background: ${t_color.purpleBlack}; padding: 1px;`}
+    attr: {style: `display: grid; grid-template-columns: 95% 5%; background: ${t_color.darkPurple}; padding: 0px;`}
   };
 
   var resBod = {
@@ -300,7 +300,8 @@ function creatSearchResultsHTML(arr,users,ats){
       width: '20px',
       height: '20px',
       cursor: 'pointer',
-      gridArea: '1/2'
+      gridArea: '1/2',
+      transform: 'scale(1.5, 1.5) translate(4px, 1px)'
     },
     innerHTML: svgs.close
   };
