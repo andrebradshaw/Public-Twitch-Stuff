@@ -16,6 +16,7 @@ var currentChats = Array.from(cn(document,'chat-line__message'));
 var currentChatText = currentChats.map(el=> unqHsh(Array.from(tn(el,'span')).map(t=> t.innerText).filter(i=> i != ''),{}).reduce((a,b)=> a+b));
 
 
+
 var chatterData = currentChats.map(el=> cn(el,'chat-author__display-name')[0].innerText + cn(el,'chat-author__display-name')[0].style.cssText.replace(/color/,''));
 
 function parseChatterObj(arr){
@@ -178,7 +179,14 @@ var t_color = {purpleBlack: '#0f0e11', navyPurple: '#19171c', darkPurple: '#2c25
 
 
 var svgs = {
-	close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="${t_color.offRed}" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`
+	close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="${t_color.offRed}" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
+	trash: `<svg width="24px" height="24px" viewBox="0 0 32 32" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g sketch:type="MSArtboardGroup" fill="${t_color.purpleLightGrey}">
+            <path d="M21,6 L25,6 L25,7 L8,7 L8,6 L12,6 L12,5 C12,3.88772964 12.8942627,3 13.9973917,3 L19.0026083,3 C20.1041422,3 21,3.8954305 21,5 L21,6 L21,6 Z M8,8 L8,26.9986131 C8,28.6562333 9.33396149,30 11.0001262,30 L21.9998738,30 C23.6567977,30 25,28.6569187 25,26.9986131 L25,8 L8,8 L8,8 Z M9,9 L9,27.0092049 C9,28.1086907 9.89339733,29 10.9918842,29 L22.0081158,29 C23.1082031,29 24,28.1017876 24,27.0092049 L24,9 L9,9 L9,9 Z M12,11 L12,27 L13,27 L13,11 L12,11 L12,11 Z M16,11 L16,27 L17,27 L17,11 L16,11 L16,11 Z M20,11 L20,27 L21,27 L21,11 L20,11 L20,11 Z M14.0029293,4 C13.4490268,4 13,4.44386482 13,5 L13,6 L20,6 L20,5 C20,4.44771525 19.5621186,4 18.9970707,4 L14.0029293,4 L14.0029293,4 Z" sketch:type="MSShapeGroup"/>
+        </g>
+    </g>
+</svg>`
 };
 
 function createEle(obj, parent) {
@@ -194,6 +202,12 @@ function createEle(obj, parent) {
   return cont;
 }
 
+
+var clearLogs = {
+	tag: 'div',
+	attr: {id: 'clear_logs', style: `cursor: pointer; grid-area: 1 / 2; padding: 4px`},
+    innerHTML: svgs.trash
+};
 
 var mainCont = {
   tag: 'div',
@@ -217,17 +231,21 @@ function createChatSearchHTML(){
 
     var head = ele('div');
     cont.appendChild(head);
-    attr(head, 'style', `display: grid; grid-template-columns: 95% 5%; grid-gap: 1%; justify-content: space-between; background: ${t_color.purple}; color: ${t_color.purpleLightGrey}; padding: 1px; border: 1.2px solid ${t_color.navyPurple}; border-top-right-radius: 0.3em; border-top-left-radius: 0.3em; cursor: move;`);
+    attr(head, 'style', `display: grid; grid-template-columns: 88% 5% 5%; grid-gap: 1%; justify-content: space-between; background: ${t_color.purple}; color: ${t_color.purpleLightGrey}; padding: 1px; border: 1.2px solid ${t_color.navyPurple}; border-top-right-radius: 0.3em; border-top-left-radius: 0.3em; cursor: move;`);
     head.onmouseover = dragElement;
+
 
     var htext = ele('div');
     head.appendChild(htext);
     attr(htext, 'style', 'grid-area: 1 / 1; padding: 4px');
     htext.innerText = 'Chat Search';
 
+    var trash = createEle(clearLogs,head);
+	trash.onclick = ()=> {currentChatText = []};
+
     var cls = ele('div');
     head.appendChild(cls);
-    attr(cls, 'style', 'grid-area: 1 / 2; width: 27px; height: 27px; cursor: pointer; transform: scale(1.2, 1.2);');
+    attr(cls, 'style', 'grid-area: 1 / 3; width: 27px; height: 27px; cursor: pointer; transform: scale(1.2, 1.2);');
     cls.innerHTML = svgs.close;
     cls.onmouseenter = aninCloseBtn;
     cls.onmouseleave = anoutCloseBtn;
