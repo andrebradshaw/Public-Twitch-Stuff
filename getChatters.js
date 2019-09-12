@@ -19,3 +19,20 @@ async function viewChatters() {
   console.log(res);
 }
 viewChatters()
+
+/*alt*/
+async function getChatters(){
+  var res = await fetch("https://tmi.twitch.tv/group/user/canadianpopulistleft/chatters");
+  var d = await res.json();
+  var mods = d.chatters.moderators ? d.chatters.moderators.reduce((a,b)=> a+'\n'+b) : '';
+  var viewers;
+  var arr = Object.entries(d.chatters);
+  var out = ''; 
+  arr.forEach(el=> {
+    if(el[1] && el[1].length > 0){
+      out = out +`${el[0]}: ${el[1].toString().replace(/,/g, ', ')}\n\n`;
+    }
+  });
+alert(d.chatter_count+' total\n'+out);
+}
+getChatters()
