@@ -68,27 +68,37 @@ function dragElement() {
 }
 
 
+
 function setChatOption(elm){
+  var username = cn(elm,'chat-author__display-name') && cn(elm,'chat-author__display-name').length ? cn(elm,'chat-author__display-name')[0].innerText : ''; 
+  var rgb = cn(elm,'chat-author__display-name') && cn(elm,'chat-author__display-name').length ? cn(elm,'chat-author__display-name')[0].style.color : ''; 
   var cont = ele('span');
   elm.insertBefore(cont,elm.firstChild);
-  a(cont,[['class','setChatOption_'],['style',`font-size: 1.5em; padding: 6px; color: #007862; cursor: pointer;`]]);
+  a(cont,[['jdat',`${JSON.stringify({username:username,rgb:rgb})}`],['class','setChatOption_'],['style',`font-size: 1.9em; padding: 6px; color: #007862; cursor: pointer;`]]);
   cont.innerText = '+';
   cont.onclick = createOptionHTML;
 }
 
 function createOptionHTML(){
   var rect = this.getBoundingClientRect();
+  var jdat = JSON.parse(this.getAttribute('jdat'));
+
   var cont = ele('div');
-  a(cont,[['style',`position: fixed; top: ${rect.top}px; left: ${rect.left}px; z-index: ${new Date().getTime()}; width: 300px;`]]);
+  a(cont,[['style',`position: fixed; top: ${rect.top}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 300px;`]]);
   document.body.appendChild(cont);
 
   var head = ele('div');
   a(head, [['style', `width: 100%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; float: right;`]]);
   cont.appendChild(head);
   head.onmouseover = dragElement;
-  
+
+  var txt = ele('span');
+  a(txt,[['style',`color: ${jdat.rgb}; font-size: 1.3em; padding: 4px;`]]);
+  head.appendChild(txt);  
+  txt.innerText = jdat.username;
+
   var cls = ele('div');
-  a(cls, [['style', `width: 32px; height: 32px; cursor: pointer;`]]);
+  a(cls, [['style', `width: 32px; height: 32px; cursor: pointer; float: right;`]]);
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
@@ -96,7 +106,7 @@ function createOptionHTML(){
   cls.onclick = () => cont.outerHTML = '';
 
   var cbod = ele('div');
-  a(cbod, [['style', `width: 100%; border-radius: 0.4em;background: #122026;`]]);
+  a(cbod, [['style', `width: 100%; border-radius: 0.4em;background: #122026; padding 4px;`]]);
   cont.appendChild(cbod);
 
   var noteCont = ele('div');
@@ -104,7 +114,7 @@ function createOptionHTML(){
   cbod.appendChild(noteCont);
   
   var input = ele('textarea');
-  a(input,[['placeholder','add user note'],['style',`width: 88%; border: 1px solid #b4ced9; border-radius: .4em; background: ##c3dbe6; padding: 4px`]]);
+  a(input,[['placeholder','add user note'],['style',`width: 88%; border: 1px solid #b4ced9; border-radius: .4em; background: ##c3dbe6; padding: 4px;`]]);
   noteCont.appendChild(input);
 
   var add = ele('div');
@@ -116,7 +126,7 @@ function createOptionHTML(){
 }
 function sendToSheets(){
   var content = tn(this.parentElement,'textarea') && tn(this.parentElement,'textarea').length ? tn(this.parentElement,'textarea')[0].value : '';
-  var output = if(content) ? encodeURIComponent(content.trim()) : '';
+  var output = content ? encodeURIComponent(content.trim()) : '';
   console.log(output);
   
 }
