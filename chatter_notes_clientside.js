@@ -80,25 +80,30 @@ function setChatOption(elm){
 }
 
 function createOptionHTML(){
+  if(gi(document,'note_option_cont')) gi(document,'note_option_cont').outerHTML = '';
+
   var rect = this.getBoundingClientRect();
   var jdat = JSON.parse(this.getAttribute('jdat'));
 
   var cont = ele('div');
-  a(cont,[['style',`position: fixed; top: ${rect.top}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 300px;`]]);
+  a(cont,[['id','note_option_cont'],['style',`position: fixed; top: ${rect.top}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 300px; padding: 4px;`]]);
   document.body.appendChild(cont);
 
   var head = ele('div');
-  a(head, [['style', `width: 100%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; float: right;`]]);
+  a(head, [['style', `width: 100%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; float: right; padding: 4px;`]]);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
   var txt = ele('span');
-  a(txt,[['style',`color: ${jdat.rgb}; font-size: 1.3em; padding: 4px;`]]);
+  a(txt,[['style',`color: ${jdat.rgb}; font-size: 1.1em; cursor: pointer; border-radius: 0.5em; padding: 4px; `]]);
   head.appendChild(txt);  
+  txt.onmouseenter = ()=> { txt.style.borderBottom = `1px solid ${jdat.rgb}`; txt.style.borderTop = `1px solid ${jdat.rgb}`; };//txt.style.color = `#0a1114`;
+  txt.onmouseleave = ()=> { txt.style.borderBottom = `1px solid transparent`; txt.style.borderTop = `1px solid transparent`; };//  txt.style.color = `${jdat.rgb}`
   txt.innerText = jdat.username;
+  txt.onclick = openUserOptions;
 
   var cls = ele('div');
-  a(cls, [['style', `width: 32px; height: 32px; cursor: pointer; float: right;`]]);
+  a(cls, [['style', `width: 27px; height: 27px; cursor: pointer; float: right;`]]);
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
@@ -110,7 +115,7 @@ function createOptionHTML(){
   cont.appendChild(cbod);
 
   var noteCont = ele('div');
-//   a(noteCont,[['style',``]]);
+  a(noteCont,[['style',`padding: 4px;`]]);
   cbod.appendChild(noteCont);
   
   var input = ele('textarea');
@@ -129,6 +134,10 @@ function sendToSheets(){
   var output = content ? encodeURIComponent(content.trim()) : '';
   console.log(output);
   
+}
+
+function openUserOptions(){
+  console.log('openUserOptions');
 }
 
 function initAddOnScript(){
