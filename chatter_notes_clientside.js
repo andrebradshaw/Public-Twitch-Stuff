@@ -86,7 +86,7 @@ function createOptionHTML(){
   var jdat = JSON.parse(this.getAttribute('jdat'));
 
   var cont = ele('div');
-  a(cont,[['id','note_option_cont'],['style',`position: fixed; top: ${rect.top}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 300px; padding: 4px;`]]);
+  a(cont,[['id','note_option_cont'],['style',`position: fixed; top: ${rect.top}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 300px; border: 1px solid ${jdat.rgb}; border-radius: 0.4em; background: ${jdat.rgb};`]]);
   document.body.appendChild(cont);
 
   var head = ele('div');
@@ -95,12 +95,12 @@ function createOptionHTML(){
   head.onmouseover = dragElement;
 
   var txt = ele('span');
-  a(txt,[['style',`color: ${jdat.rgb}; font-size: 1.1em; cursor: pointer; border-radius: 0.5em; padding: 4px; `]]);
+  a(txt,[['jdat',`${this.getAttribute('jdat')}`],['style',`color: ${jdat.rgb}; font-size: 1.1em; cursor: pointer; border-radius: 0.5em; padding: 4px; `]]);
   head.appendChild(txt);  
-  txt.onmouseenter = ()=> { txt.style.borderBottom = `1px solid ${jdat.rgb}`; txt.style.borderTop = `1px solid ${jdat.rgb}`; };//txt.style.color = `#0a1114`;
-  txt.onmouseleave = ()=> { txt.style.borderBottom = `1px solid transparent`; txt.style.borderTop = `1px solid transparent`; };//  txt.style.color = `${jdat.rgb}`
+  txt.onmouseenter = ()=> { txt.style.borderBottom = `1px solid ${jdat.rgb}`; txt.style.borderTop = `1px solid ${jdat.rgb}`; };
+  txt.onmouseleave = ()=> { txt.style.borderBottom = `1px solid transparent`; txt.style.borderTop = `1px solid transparent`; };
   txt.innerText = jdat.username;
-  txt.onclick = openUserOptions;
+  txt.onclick = createNotesHistoryHTML;
 
   var cls = ele('div');
   a(cls, [['style', `width: 27px; height: 27px; cursor: pointer; float: right;`]]);
@@ -129,6 +129,49 @@ function createOptionHTML(){
   add.onclick = sendToSheets;
   
 }
+
+function createNotesHistoryHTML(){
+  if(gi(document,'notes_view_cont')) gi(document,'notes_view_cont').outerHTML = '';
+  var rect = this.parentElement.parentElement.getBoundingClientRect();
+  var jdat = JSON.parse(this.getAttribute('jdat'));
+
+  var cont = ele('div');
+  a(cont,[['id','notes_view_cont'],['style',`position: fixed; top: ${(rect.top-50)}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 600px; border: 1px solid ${jdat.rgb}; border-radius: 0.4em; background: ${jdat.rgb};`]]);
+  document.body.appendChild(cont);
+
+  var head = ele('div');
+  a(head, [['style', `width: 100%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; float: right; padding: 4px;`]]);
+  cont.appendChild(head);
+  head.onmouseover = dragElement;
+  
+  var txt = ele('span');
+  a(txt,[['jdat',`${this.getAttribute('jdat')}`],['style',`color: ${jdat.rgb}; font-size: 1.1em; cursor: pointer; border-radius: 0.5em; padding: 4px; `]]);
+  head.appendChild(txt);  
+  txt.onmouseenter = ()=> { txt.style.borderBottom = `1px solid ${jdat.rgb}`; txt.style.borderTop = `1px solid ${jdat.rgb}`; };
+  txt.onmouseleave = ()=> { txt.style.borderBottom = `1px solid transparent`; txt.style.borderTop = `1px solid transparent`; };
+  txt.innerHTML = jdat.username+` notes history`;
+  txt.onclick = openUserOptions;
+
+  var cls = ele('div');
+  a(cls, [['style', `width: 27px; height: 27px; cursor: pointer; float: right;`]]);
+  head.appendChild(cls);
+  cls.innerHTML = svgs.close;
+  cls.onmouseenter = aninCloseBtn;
+  cls.onmouseleave = anoutCloseBtn;
+  cls.onclick = () => cont.outerHTML = '';
+
+  var cbod = ele('div');
+  a(cbod, [['style', `width: 100%; border-radius: 0.4em;background: #122026; padding 4px;`]]);
+  cont.appendChild(cbod);
+
+  var noteCont = ele('div');
+  a(noteCont,[['style',`padding: 4px;`]]);
+  cbod.appendChild(noteCont);
+  
+//   var notesHistoryArr =   
+
+}
+
 function sendToSheets(){
   var content = tn(this.parentElement,'textarea') && tn(this.parentElement,'textarea').length ? tn(this.parentElement,'textarea')[0].value : '';
   var output = content ? encodeURIComponent(content.trim()) : '';
