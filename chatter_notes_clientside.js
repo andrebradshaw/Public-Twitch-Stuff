@@ -136,7 +136,7 @@ function createNotesHistoryHTML(){
   var jdat = JSON.parse(this.getAttribute('jdat'));
 
   var cont = ele('div');
-  a(cont,[['id','notes_view_cont'],['style',`position: fixed; top: ${(rect.top-50)}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 600px; border: 1px solid ${jdat.rgb}; border-radius: 0.4em; background: ${jdat.rgb};`]]);
+  a(cont,[['id','notes_view_cont'],['style',`position: fixed; top: ${(rect.top-50)}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 600px; max-height: 600px; border: 1px solid ${jdat.rgb}; border-radius: 0.4em; background: ${jdat.rgb};`]]);
   document.body.appendChild(cont);
 
   var head = ele('div');
@@ -162,7 +162,7 @@ function createNotesHistoryHTML(){
   cont.appendChild(cbod);
 
   var noteCont = ele('div');
-  a(noteCont,[['style',`padding: 4px; width: 100%;`]]);
+  a(noteCont,[['style',`padding: 4px; width: 100%; overflow-y: auto;`]]);
   cbod.appendChild(noteCont);
   
   var notesHistoryArr = [{mod: 'Mod', channel: 'Channel', comment: 'Comment', username: 'Username'},{mod: 'sourcingsupport', channel: 'ACTdotTV', comment: 'alt account for BustedHipGaming', username: 'BareBonesTalk'}];
@@ -173,12 +173,12 @@ function createNotesHistoryHTML(){
     noteCont.appendChild(row);
 
     var mod = ele('div');
-    a(mod,[['style',`padding: 2px; border-right: 1px dotted ${jdat.rgb}; ${(i==0 ? 'text-align: center;' : 'text-align: left;')}`]]);
+    a(mod,[['style',`padding: 2px; border-right: 1px dotted ${jdat.rgb}; text-align: center;`]]);
     row.appendChild(mod);
     mod.innerText = `${notesHistoryArr[i].mod}`;
 
     var channel = ele('div');
-    a(channel,[['style',`padding: 2px; border-right: 1px dotted ${jdat.rgb}; ${(i==0 ? 'text-align: center;' : 'text-align: left;')}`]]);
+    a(channel,[['style',`padding: 2px; border-right: 1px dotted ${jdat.rgb}; text-align: center;`]]);
     row.appendChild(channel);
     channel.innerText = `${notesHistoryArr[i].channel}`;
 
