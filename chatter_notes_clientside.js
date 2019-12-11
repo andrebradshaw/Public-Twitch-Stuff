@@ -90,7 +90,7 @@ function createOptionHTML(){
   document.body.appendChild(cont);
 
   var head = ele('div');
-  a(head, [['style', `width: 100%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; float: right; padding: 4px;`]]);
+  a(head, [['style', `width: 100%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 4px;`]]);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
@@ -111,7 +111,7 @@ function createOptionHTML(){
   cls.onclick = () => cont.outerHTML = '';
 
   var cbod = ele('div');
-  a(cbod, [['style', `width: 100%; border-radius: 0.4em;background: #122026; padding 4px;`]]);
+  a(cbod, [['style', `width: 100%; border-bottom-right-radius: 0.4em; border-bottom-left-radius: 0.4em; background: #122026; padding 4px;`]]);
   cont.appendChild(cbod);
 
   var noteCont = ele('div');
@@ -140,20 +140,17 @@ function createNotesHistoryHTML(){
   document.body.appendChild(cont);
 
   var head = ele('div');
-  a(head, [['style', `width: 100%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; float: right; padding: 4px;`]]);
+  a(head, [['style', `display: grid; grid-template-columns: minmax(260px, 1fr) 30px; width: 100%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 4px;`]]);
   cont.appendChild(head);
   head.onmouseover = dragElement;
   
   var txt = ele('span');
-  a(txt,[['jdat',`${this.getAttribute('jdat')}`],['style',`color: ${jdat.rgb}; font-size: 1.1em; cursor: pointer; border-radius: 0.5em; padding: 4px; `]]);
-  head.appendChild(txt);  
-  txt.onmouseenter = ()=> { txt.style.borderBottom = `1px solid ${jdat.rgb}`; txt.style.borderTop = `1px solid ${jdat.rgb}`; };
-  txt.onmouseleave = ()=> { txt.style.borderBottom = `1px solid transparent`; txt.style.borderTop = `1px solid transparent`; };
+  a(txt,[['jdat',`${this.getAttribute('jdat')}`],['style',`color: ${jdat.rgb}; font-size: 1.1em; border-radius: 0.5em; padding: 4px; `]]);
+  head.appendChild(txt);
   txt.innerHTML = jdat.username+` notes history`;
-  txt.onclick = openUserOptions;
 
   var cls = ele('div');
-  a(cls, [['style', `width: 27px; height: 27px; cursor: pointer; float: right;`]]);
+  a(cls, [['style', `width: 27px; height: 27px; cursor: pointer;`]]); // float: right;
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
@@ -161,15 +158,37 @@ function createNotesHistoryHTML(){
   cls.onclick = () => cont.outerHTML = '';
 
   var cbod = ele('div');
-  a(cbod, [['style', `width: 100%; border-radius: 0.4em;background: #122026; padding 4px;`]]);
+  a(cbod, [['style', `width: 100%; border-bottom-right-radius: 0.4em; border-bottom-left-radius: 0.4em; background: #122026; width: 100%; padding 4px;`]]);
   cont.appendChild(cbod);
 
   var noteCont = ele('div');
-  a(noteCont,[['style',`padding: 4px;`]]);
+  a(noteCont,[['style',`padding: 4px; width: 100%;`]]);
   cbod.appendChild(noteCont);
   
-//   var notesHistoryArr =   
+  var notesHistoryArr = [{mod: 'Mod', channel: 'Channel', comment: 'Comment', username: 'Username'},{mod: 'sourcingsupport', channel: 'ACTdotTV', comment: 'alt account for BustedHipGaming', username: 'BareBonesTalk'}];
 
+  for(var i=0; i<notesHistoryArr.length; i++){
+    var row = ele('div');
+    a(row,[['style',`display: grid; grid-template-columns: minmax(100px, 1fr) 100px 390px; color: #fff;${(i == 0 ? 'color: '+jdat.rgb+';' : '#fff;')} border-bottom: 1px solid ${jdat.rgb}; padding: 4px;`]]);
+    noteCont.appendChild(row);
+
+    var mod = ele('div');
+    a(mod,[['style',`padding: 2px; border-right: 1px dotted ${jdat.rgb}; ${(i==0 ? 'text-align: center;' : 'text-align: left;')}`]]);
+    row.appendChild(mod);
+    mod.innerText = `${notesHistoryArr[i].mod}`;
+
+    var channel = ele('div');
+    a(channel,[['style',`padding: 2px; border-right: 1px dotted ${jdat.rgb}; ${(i==0 ? 'text-align: center;' : 'text-align: left;')}`]]);
+    row.appendChild(channel);
+    channel.innerText = `${notesHistoryArr[i].channel}`;
+
+    var comment = ele('div');
+    a(comment,[['style',`padding: 2px; ${(i==0 ? 'text-align: center;' : 'text-align: left;')}`]]);
+    row.appendChild(comment);
+    comment.innerText = `${notesHistoryArr[i].comment}`;
+
+  }
+  
 }
 
 function sendToSheets(){
