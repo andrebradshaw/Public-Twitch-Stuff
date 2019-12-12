@@ -93,7 +93,7 @@ function createOptionHTML(){
   var jdat = JSON.parse(this.getAttribute('jdat'));
 
   var cont = ele('div');
-  a(cont,[['id','note_option_cont'],['style',`position: fixed; top: ${rect.top}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 300px; border: 1px solid ${jdat.rgb}; border-radius: 0.4em; background: ${jdat.rgb};`]]);
+  a(cont,[['id','note_option_cont'],['style',`position: fixed; width: 300px; top: ${rect.top}px; left: ${(rect.left-600)}px; z-index: ${new Date().getTime()}; width: 100px; border: 1px solid ${jdat.rgb}; border-radius: 0.4em; background: transparent; opacity: 0;`]]);
   document.body.appendChild(cont);
 
   var head = ele('div');
@@ -138,6 +138,11 @@ function createOptionHTML(){
   var msgObj = getLastChatObj(this.parentElement);
 
   console.log(msgObj);
+ 
+  cont.style.width = '600px';
+  cont.style.background = `${jdat.rgb}`;
+  cont.style.opacity = '1';
+  cont.style.transition = 'all 0.5s';
 }
 
 function createNotesHistoryHTML(){
@@ -146,7 +151,7 @@ function createNotesHistoryHTML(){
   var jdat = JSON.parse(this.getAttribute('jdat'));
 
   var cont = ele('div');
-  a(cont,[['id','notes_view_cont'],['style',`position: fixed; top: ${(rect.top-50)}px; left: ${(rect.left-300)}px; z-index: ${new Date().getTime()}; width: 600px; max-height: 600px; border: 1px solid ${jdat.rgb}; border-radius: 0.4em; background: ${jdat.rgb};`]]);
+  a(cont,[['id','notes_view_cont'],['style',`position: fixed; top: ${(rect.top-100)}px; left: ${(rect.left)}px; z-index: ${new Date().getTime()}; width: 600px; max-height: 600px; border: 1px solid ${jdat.rgb}; border-radius: 0.4em; background: ${jdat.rgb};`]]);
   document.body.appendChild(cont);
 
   var head = ele('div');
@@ -160,7 +165,7 @@ function createNotesHistoryHTML(){
   txt.innerHTML = jdat.username+` notes history`;
 
   var cls = ele('div');
-  a(cls, [['style', `width: 27px; height: 27px; cursor: pointer;`]]); // float: right;
+  a(cls, [['style', `width: 27px; height: 27px; cursor: pointer;`]]); 
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
@@ -198,7 +203,7 @@ function createNotesHistoryHTML(){
     comment.innerText = `${notesHistoryArr[i].comment}`;
 
   }
-  
+
 }
 
 
