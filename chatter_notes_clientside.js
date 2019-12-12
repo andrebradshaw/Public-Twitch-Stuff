@@ -130,11 +130,12 @@ function createOptionHTML(){
   noteCont.appendChild(input);
 
   var add = ele('div');
-  a(add,[['style',`font-size: 1.3em; cursor: pointer; float: right; padding: 8px; color: #007862;`]]);
+  a(add,[['style',`font-size: 1.3em; cursor: pointer; float: right; padding: 8px; color: #007862; transition: all .3s;`]]);
   add.innerText = '=>';
   noteCont.appendChild(add);
   add.onclick = sendToSheets;
-  
+  add.onmouseenter = () => add.style.transform = 'scale(2,1.5)';
+  add.onmouseleave = () => add.style.transform = 'scale(1,1)';
   var msgObj = getLastChatObj(this.parentElement);
 
   console.log(msgObj);
