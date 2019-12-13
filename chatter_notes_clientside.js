@@ -76,15 +76,6 @@ function dragElement() {
 
 
 
-function setChatOption(elm){
-  var username = cn(elm,'chat-author__display-name') && cn(elm,'chat-author__display-name').length ? cn(elm,'chat-author__display-name')[0].innerText : ''; 
-  var rgb = cn(elm,'chat-author__display-name') && cn(elm,'chat-author__display-name').length ? cn(elm,'chat-author__display-name')[0].style.color : ''; 
-  var cont = ele('span');
-  elm.insertBefore(cont,elm.firstChild);
-  a(cont,[['jdat',`${JSON.stringify({username:username,rgb:rgb})}`],['class','setChatOption_'],['style',`font-size: 1.9em; padding: 6px; color: #007862; cursor: pointer;`]]);
-  cont.innerText = '+';
-  cont.onclick = createOptionHTML;
-}
 
 function createOptionHTML(){
   if(gi(document,'note_option_cont')) gi(document,'note_option_cont').outerHTML = '';
@@ -232,10 +223,38 @@ function openUserOptions(){
   console.log('openUserOptions');
 }
 
-function initAddOnScript(){
-  if(cn(document,'setChatOption_') && cn(document,'setChatOption_').length) Array.from(cn(document,'setChatOption_')).forEach(el=> el.outerHTML = '');
-  var chats = Array.from(cn(document,'chat-line__username')).map(el=> el.parentElement).forEach(el=> setChatOption(el));
-  console.log(chats);
+function addHoverListener(el){
+//   if(cn(document,'setChatOption_') && cn(document,'setChatOption_').length) Array.from(cn(document,'setChatOption_')).forEach(el=> el.outerHTML = '');
+  el.onmouseenter = () => { 
+    if(cn(el,'setChatOption_').length == 0){
+      setChatOption(el);
+    }
+  };
 }
 
-initAddOnScript()
+function setChatOption(elm){
+  var username = cn(elm,'chat-author__display-name') && cn(elm,'chat-author__display-name').length ? cn(elm,'chat-author__display-name')[0].innerText : ''; 
+  var rgb = cn(elm,'chat-author__display-name') && cn(elm,'chat-author__display-name').length ? cn(elm,'chat-author__display-name')[0].style.color : ''; 
+  var cont = ele('span');
+  elm.insertBefore(cont,elm.firstChild);
+  a(cont,[['jdat',`${JSON.stringify({username:username,rgb:rgb})}`],['class','setChatOption_'],['style',`font-family: Andale Mono, monospace; font-size: 2em; padding: 2px; color: #007862; cursor: pointer;`]]);
+  cont.innerText = 'c';
+  cont.onclick = createOptionHTML;
+}
+
+function initCommentScripts(){
+  var chats = Array.from(cn(document,'chat-line__message')).forEach(el=> addHoverListener(el));
+}
+
+
+var domObserver = new MutationObserver(() => {
+  initCommentScripts();
+});
+
+domObserver.observe(cn(document,'chat-room tw-flex tw-flex-column tw-flex-grow-1 tw-flex-shrink-1 tw-full-width')[0], {
+  childList: true,
+  subtree: true
+});
+
+
+initCommentScripts();
