@@ -19,14 +19,13 @@ function pollToArray(msg){
   datarr.sort((a,b)=> a[1] - b[1]);
   datarr.reverse()
   console.log(datarr)
-  
+  createTableView(cn(msg,'text-fragment')[0],datarr)
   return datarr;
 }
 
 function createTableView(elm,arr){
-  arr.map(row=> row.map(col=> {
-    
-  }));
+  var html = `<div style="border: 2px solid rgb(180, 84, 255)"><span style="border-left: 1px dotted rgb(180, 84, 255); width: 60%; padding: 6px;">Candidate</span><span  style="width: 40%; padding: 6px;">Points</span>`+arr.map(row=>  `<div><span style="border-left: 1px dotted rgb(180, 84, 255); width: 60%; padding: 6px;">${row[0]}</span><span  style="width: 40%; padding: 6px;">${row[1]}</span></div>`).reduce((a,b)=> a+b) + '</div>';
+  elm.innerHTML = html;
 }
 
 Array.from(cn(document,'chat-line__message')).forEach(el=> /You can vote with bits or tips for the following options:/.test(el.innerText) ? pollToArray(el) : '');
