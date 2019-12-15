@@ -7,6 +7,7 @@ var unq = (arr) => arr.filter((e, p, a) => a.indexOf(e) == p);
 var delay = (ms) => new Promise(res => setTimeout(res, ms));
 var ele = (t) => document.createElement(t);
 var attr = (o, k, v) => o.setAttribute(k, v);
+var fixCase = (s) => s.split(/\b-\b/).map(el=> el.replace(/\w\S*/g, txt=> txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())).join('-');
 
 var a = (l, r) => r.forEach(a => attr(l, a[0], a[1]));
 
@@ -24,7 +25,7 @@ function pollToArray(msg){
 }
 
 function createTableView(elm,arr){
-  var html = `<div style="border: 2px solid rgb(180, 84, 255)"><span style="border-left: 1px dotted rgb(180, 84, 255); width: 60%; padding: 6px;">Candidate</span><span  style="width: 40%; padding: 6px;">Points</span>`+arr.map(row=>  `<div><span style="border-left: 1px dotted rgb(180, 84, 255); width: 60%; padding: 6px;">${row[0]}</span><span  style="width: 40%; padding: 6px;">${row[1]}</span></div>`).reduce((a,b)=> a+b) + '</div>';
+  var html = `<div style="border: 2px solid rgb(180, 84, 255)"><span style="border-left: 1px dotted rgb(180, 84, 255); width: 60%; padding: 6px;">Candidate</span><span  style="width: 40%; padding: 6px;">Points</span>`+arr.map(row=> `<div><span style="border-right: 1px dotted rgb(180, 84, 255); padding: 6px;">${fixCase(row[0])}</span><span style="padding: 6px;">${row[1]}</span></div>`).reduce((a,b)=> a+b) + '</div>';
   elm.innerHTML = html;
 }
 
