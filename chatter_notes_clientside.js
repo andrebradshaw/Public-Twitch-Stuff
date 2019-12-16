@@ -1,3 +1,4 @@
+//TODO: commands [/\!tts/,'type say followed by a colon then your sentence']
 var reg = (o, n) => o ? o[n] : '';
 var cn = (o, s) => o ? o.getElementsByClassName(s) : console.log(o);
 var tn = (o, s) => o ? o.getElementsByTagName(s) : console.log(o);
