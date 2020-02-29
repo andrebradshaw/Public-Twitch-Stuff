@@ -91,7 +91,7 @@ async function looper(){
   for(var i=0; i<30; i++){
     var two = await getFollowerAPI(cursors[(cursors.length-1)]);
     var edges2 = two[0].data.user.followers.edges ? two[0].data.user.followers.edges : null;
-    var names2 = edges2 ? edges2.map(el=> [(el.node && el.node.displayName ? el.node.displayName : ''),(el.node && el.node.id ? : '')]) : [];
+    var names2 = edges2 ? edges2.map(el=> [(el.node && el.node.displayName ? el.node.displayName : ''),(el.node && el.node.id ?  el.node.id  : '')]) : [];
     cursors = edges2.map(el=> el.cursor);
     names2.forEach(el=> {if(names.every(ii=> ii[0] != el[0])) {names.push(el)} });
     await delay(rando(555)+111);
@@ -99,7 +99,5 @@ async function looper(){
   }
 console.log(names)
 }
-
-looper()
 
 //.map(el=> el.reduce((a,b)=> a+'\t'+b)).reduce((a,b)=> a+'\n'+b)
