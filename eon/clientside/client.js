@@ -223,7 +223,7 @@ function createYTnotesHTML() {
 }
 
 function getPageText() {
-  var text = Array.from(tn(document,'p')).map(el=> el.innerText.replace(/^[\W\n]*Advertisement[\W\n]*$|^[\W\n]*Supported by[\W\n]*$/ig,'')+'\n').reduce((a,b)=> a+''+b).trim();
+  var text = Array.from(tn(document,'p')).length ? Array.from(tn(document,'p')).map(el=> el.innerText.replace(/^[\W\n]*Advertisement[\W\n]*$|^[\W\n]*Supported by[\W\n]*$/ig,'')+'\n').reduce((a,b)=> a+''+b).trim() : '';
   return text.length > 600 ? text.slice(0,600) : text; 
 }
 
