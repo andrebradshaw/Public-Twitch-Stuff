@@ -13,7 +13,7 @@ var a = (l, r) => r.forEach(a => attr(l, a[0], a[1]));
 var unqHsh = (a, o) => a.filter(i => o.hasOwnProperty(i) ? false : (o[i] = true));
 
 
-var appsScriptWebAppLink = '__________________________________________';
+var appsScriptWebAppLink = '_______________________';
 
 var channel_names = ["sourcingsupport","27dollars","touringnews","scuffeddario","baela","canadianpopulistleft","bmcmoo","drrbwinbwinolivaw","marcmunky","puffshake","ladyraynecloud","freemz","unrelatedthings","coopdujour","mxvivianwulf","aidanwould","leonseifers"];
 
@@ -192,7 +192,7 @@ function createYTnotesHTML() {
   user.onkeyup = searchUsersAutoComplete;
 
   var setnote = ele('textarea');
-  a(setnote, [['id', 'save_note_val'],['maxlength','700'],['placeholder', 'Save note (up to 700 characters)'],['style', `height: 280px; grid-area: 1 / 1; border: 1px solid transparent; border-radius: 0.3em; padding: 2px;`]]);
+  a(setnote, [['id', 'save_note_val'],['maxlength','1001'],['placeholder', 'Save note (up to 1000 characters)'],['style', `height: 280px; grid-area: 1 / 1; border: 1px solid transparent; border-radius: 0.3em; padding: 2px;`]]);
   c1.appendChild(setnote);
   setnote.value = getPageText();
   
@@ -224,7 +224,7 @@ function createYTnotesHTML() {
 
 function getPageText() {
   var text = Array.from(tn(document,'p')).length ? Array.from(tn(document,'p')).map(el=> el.innerText.replace(/^[\W\n]*Advertisement[\W\n]*$|^[\W\n]*Supported by[\W\n]*$/ig,'')+'\n').reduce((a,b)=> a+''+b).trim() : '';
-  return text.length > 600 ? text.slice(0,600) : text; 
+  return text.length > 1000 ? text.slice(0,1000) : text; 
 }
 
 function btnhoverin() {
