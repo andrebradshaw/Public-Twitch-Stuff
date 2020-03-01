@@ -1,5 +1,3 @@
-
-
 var reg = (o, n) => o ? o[n] : '';
 var cn = (o, s) => o ? o.getElementsByClassName(s) : console.log(o);
 var tn = (o, s) => o ? o.getElementsByTagName(s) : console.log(o);
@@ -15,7 +13,7 @@ var a = (l, r) => r.forEach(a => attr(l, a[0], a[1]));
 var unqHsh = (a, o) => a.filter(i => o.hasOwnProperty(i) ? false : (o[i] = true));
 
 
-var appsScriptWebAppLink = 'https://script.google.com/macros/s/AKfycbxADudLqIRaf446cw4qvUt1FTv7RbE5o8xmbL8yByKWKVYAY_PO/exec';
+var appsScriptWebAppLink = '__________________________________________';
 
 var channel_names = ["sourcingsupport","27dollars","touringnews","scuffeddario","baela","canadianpopulistleft","bmcmoo","drrbwinbwinolivaw","marcmunky","puffshake","ladyraynecloud","freemz","unrelatedthings","coopdujour","mxvivianwulf","aidanwould","leonseifers"];
 
@@ -149,7 +147,7 @@ function createYTnotesHTML() {
 
   var cont = ele('div');
   attr(cont, 'id', 'youtube_note_search_container');
-  attr(cont, 'style', `position: fixed; top: 5%; left: 10%; width: ${contWidth}px; z-index: ${new Date().getTime()};`);
+  attr(cont, 'style', `position: fixed; top: 5%; right: 10%; width: ${contWidth}px; z-index: ${new Date().getTime()};`);
   document.body.appendChild(cont);
 
 
@@ -255,8 +253,8 @@ async function sendNotesToSheets() {
   var linkOutput = encodeURIComponent(window.location.href);
   var notes = encodeURIComponent(gi(document, 'save_note_val').value.trim());
   var username = gi(document, 'save_user_val').value.trim();
-  updateUserName(username);
   var send_to_sheets = `${appsScriptWebAppLink}?link=${linkOutput}&notes=${notes}&user=${username}`;
+  if (username) updateUserName(username);
   if (notes) window.open(send_to_sheets);
 
 }
