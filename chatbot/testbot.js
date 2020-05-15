@@ -6,7 +6,7 @@ const opts = {
       password: 'oauth:YOUR_AUTH_ID'
     },
     channels: [
-      'sourcingsupport'
+      '_YOUR_Target_CHANNEL_'
     ]
   };
 
