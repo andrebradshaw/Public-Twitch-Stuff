@@ -27,10 +27,6 @@ var channels = [
 
 var rando = (n) => Math.round(Math.random() * n);
 
-async function getUsers(auth,user_id){
-  var res = await fetch(`https://api.twitch.tv/helix/users?id=${user_id}`)
-}
-
 var shout_out_list = [
     {username: "drbwinbwin", last_shout_timestamp: 0 },
     {username: "carpepax", last_shout_timestamp: 0 },
