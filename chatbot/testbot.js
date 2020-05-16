@@ -48,6 +48,24 @@ var shout_out_list = [
 
 var auth_commanders = ['sourcingsupport','donny_tinyhands','27dollars','carpepax','drbwinbwin'];
 
+function isStreamer(user_obj){
+  var is_streamer = user_obj.broadcaster_type == 'partner' || user_obj.broadcaster_type == 'affiliate';
+  var high_view_count = user_obj.view_count > 2000;
+  
+// {
+//   "data": [{
+//     "id": "44322889",
+//     "login": "dallas",
+//     "display_name": "dallas",
+//     "type": "staff",
+//     "broadcaster_type": "",
+//     "description": "Just a gamer playing games and chatting. :)",
+//     "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/dallas-profile_image-1a2c906ee2c35f12-300x300.png",
+//     "offline_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/dallas-channel_offline_image-1a2c906ee2c35f12-1920x1080.png",
+//     "view_count": 191836881,
+//     "email": "login@provider.com"
+//   }]
+}
 
 function addVIPstoShoutOutList(context){
   var target_index = shout_out_list.findIndex(r=> r.username == context.username); 
