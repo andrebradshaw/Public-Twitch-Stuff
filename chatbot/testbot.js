@@ -10,6 +10,9 @@ const opts = {
     ]
   };
 
+
+
+
 var reg = (o, n) => o ? o[n] : '';
 
 var channels = [
@@ -20,9 +23,15 @@ var channels = [
 ]
 
 
+// {username: "27dollars", last_shout_timestamp: 0 },
+
+var rando = (n) => Math.round(Math.random() * n);
+
+async function getUsers(auth,user_id){
+  var res = await fetch(`https://api.twitch.tv/helix/users?id=${user_id}`)
+}
 
 var shout_out_list = [
-    {username: "27dollars", last_shout_timestamp: 0 },
     {username: "drbwinbwin", last_shout_timestamp: 0 },
     {username: "carpepax", last_shout_timestamp: 0 },
     {username: "marcmunky", last_shout_timestamp: 0 },
@@ -48,24 +57,6 @@ var shout_out_list = [
 
 var auth_commanders = ['sourcingsupport','donny_tinyhands','27dollars','carpepax','drbwinbwin'];
 
-function isStreamer(user_obj){
-  var is_streamer = user_obj.broadcaster_type == 'partner' || user_obj.broadcaster_type == 'affiliate';
-  var high_view_count = user_obj.view_count > 2000;
-  
-// {
-//   "data": [{
-//     "id": "44322889",
-//     "login": "dallas",
-//     "display_name": "dallas",
-//     "type": "staff",
-//     "broadcaster_type": "",
-//     "description": "Just a gamer playing games and chatting. :)",
-//     "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/dallas-profile_image-1a2c906ee2c35f12-300x300.png",
-//     "offline_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/dallas-channel_offline_image-1a2c906ee2c35f12-1920x1080.png",
-//     "view_count": 191836881,
-//     "email": "login@provider.com"
-//   }]
-}
 
 function addVIPstoShoutOutList(context){
   var target_index = shout_out_list.findIndex(r=> r.username == context.username); 
@@ -118,7 +109,7 @@ function chatLogger(context,msg){
   if(chat_logs.length > 250) chat_logs.shift();
 }
 
-function lastNMsgs(n,context,target){
+function lastNMsgs(context,target){
   var user_logs = chat_logs.filter(r=> r.username == context.username);//.sort((a,b)=> a[`${context.username}`]['tmi-sent-ts'] - b[`${context.username}`]['tmi-sent-ts']);
   user_logs.reverse();
   if(user_logs[1]){
@@ -130,12 +121,26 @@ function clearUserMsg(context,msg,target){
   var reg = (o, n) => o ? o[n] : '';
   var do_clear = /\!edit/i.test(msg);
   if(do_clear){
-    var num_to_clear = parseInt(reg(/\d+/.exec(msg),0));
-    console.log(`clearing out last ${num_to_clear} messages from ${context.username}`);
-    lastNMsgs(num_to_clear,context,target)
+    lastNMsgs(context,target);
   }
 }
-
+function isStreamer(user_obj){
+  var is_streamer = user_obj.broadcaster_type == 'partner' || user_obj.broadcaster_type == 'affiliate';
+  var high_view_count = user_obj.view_count > 2000;
+// {
+//   "data": [{
+//     "id": "44322889",
+//     "login": "dallas",
+//     "display_name": "dallas",
+//     "type": "staff",
+//     "broadcaster_type": "",
+//     "description": "Just a gamer playing games and chatting. :)",
+//     "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/dallas-profile_image-1a2c906ee2c35f12-300x300.png",
+//     "offline_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/dallas-channel_offline_image-1a2c906ee2c35f12-1920x1080.png",
+//     "view_count": 191836881,
+//     "email": "login@provider.com"
+//   }]
+}
 // Create a client with our options
 const client = new tmi.client(opts);
 
@@ -161,8 +166,9 @@ function onMessageHandler (target, context, msg, self) {
   var badge_shout = addVIPstoShoutOutList(context);
   // commandAddShoutOutChannel(context,chat_msg,target);
   
+  var msgArr = ['Click that link and go follow.', 'Follow them, or you will have regrets.', 'When you are on your death bed -- You will regret not having enjoyed their content.','Click the link. Do it now. We will wait.'];
   if(should_shout || badge_shout){
-    client.say(target, `https://www.twitch.tv/${context.username} PogChamp say: ${context.username} is in our chat! Click that link and go follow them.`);
+    client.say(target, `https://www.twitch.tv/${context.username} PogChamp say: ${context.username} is in our chat! ${msgArr[rando(3)]}`);
   }
 
 }
