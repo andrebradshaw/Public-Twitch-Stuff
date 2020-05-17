@@ -42,13 +42,14 @@ async function looper(arr){
 looper(all_users)
 
 /////////////
+
 var reg = (o, n) => o ? o[n] : '';
 var rando = (n) => Math.round(Math.random() * n);
 var unq = (arr) => arr.filter((e, p, a) => a.indexOf(e) == p);
 var delay = (ms) => new Promise(res => setTimeout(res, ms));
 
 async function getFollowerAPI(cursor){
-  var res = await fetch("https://gql.twitch.tv/gql", {"credentials":"include","headers":{"accept":"*/*","accept-language":"en-US","authorization":"OAuth kvbtbyktpvmo6vsu812pcnztk1pzcw","client-id":"kimne78kx3ncx6brgo4mv6wki5h1ko","content-type":"text/plain;charset=UTF-8","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-site","x-device-id":"5937f6c0181c7672"},"referrer":"https://www.twitch.tv/touringnews/followers","referrerPolicy":"no-referrer-when-downgrade","body":"[{\"operationName\":\"ChannelFollowers\",\"variables\":{\"cursor\":\""+cursor+"\",\"limit\":100,\"login\":\"touringnews\",\"order\":\"DESC\"},\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"74600e2be97dd9431dd195f1010f2c161ae48ce53556b545ce7665b27d91ad07\"}}}]","method":"POST","mode":"cors"});
+  var res = await fetch("https://gql.twitch.tv/gql", {"credentials":"include","headers":{"accept":"*/*","accept-language":"en-US","authorization":"OAuth ljcrpaej76iqf8uhputof6t199j022","client-id":"kimne78kx3ncx6brgo4mv6wki5h1ko","content-type":"text/plain;charset=UTF-8","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-site","x-device-id":"2c256b16ac5521e7"},"referrer":"https://www.twitch.tv/theory_pleeb/followers","referrerPolicy":"no-referrer-when-downgrade","body":"[{\"operationName\":\"Followers\",\"variables\":{\"cursor\":\""+cursor+"\",\"limit\":100,\"login\":\"theory_pleeb\",\"order\":\"DESC\"},\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"d01d1e00fde5d0d5618249072692dff97bc7b5ebe5722d4c2853344ad6eb2b4c\"}}}]","method":"POST","mode":"cors"});
   var d = await res.json();
   console.log(d);
   return d;
@@ -56,26 +57,30 @@ async function getFollowerAPI(cursor){
 
 async function looper(){
   
-  var one = await getFollowerAPI(1582820539443266252);
+  var one = await getFollowerAPI(1592820539443266252);
   var edges = one[0].data.user.followers.edges ? one[0].data.user.followers.edges : null;
   var names = edges ? edges.map(el=> el.node && el.node.displayName ? el.node.displayName : '') : [];
   var cursors = edges.map(el=> el.cursor);
 
   for(var i=0; i<30; i++){
+   if(cursors){
     var two = await getFollowerAPI(cursors[(cursors.length-1)]);
     var edges2 = two[0].data.user.followers.edges ? two[0].data.user.followers.edges : null;
-    var names2 = edges2 ? edges2.map(el=> el.node && el.node.displayName ? el.node.displayName : '') : [];
-    cursors = edges2.map(el=> el.cursor);
+    var names2 = edges2 ? edges2.map(el=> el.node && el.node.login ? el.node.login : '') : [];
+    cursors = edges2 ? edges2.map(el=> el.cursor) : null;
     names2.forEach(el=> {if(names.every(ii=> ii != el)) {names.push(el)} });
     await delay(rando(555)+111);
    console.log(i);
-  }
+   }
+  } 
 console.log(names)
 }
 
 looper()
 
 
+
+// 
 
 
 
