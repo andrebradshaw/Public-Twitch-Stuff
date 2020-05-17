@@ -13,8 +13,34 @@ function parseReadableDate(t){
   var d = new Date(t);
   return `${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${(d.getMinutes() > 9 ? d.getMinutes() : '0'+d.getMinutes())}`;
 }
-async function getFollowerDetail(user){
-  var res = await fetch("https://gql.twitch.tv/gql", {"credentials":"include","headers":{"accept":"*/*","accept-language":"en-US","authorization":"OAuth kvbtbyktpvmo6vsu812pcnztk1pzcw","client-id":"kimne78kx3ncx6brgo4mv6wki5h1ko","content-type":"text/plain;charset=UTF-8","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-site","x-device-id":"5937f6c0181c7672"},"referrer":"https://www.twitch.tv/touringnews/followers","referrerPolicy":"no-referrer-when-downgrade","body":"[{\"operationName\":\"ViewerCard\",\"variables\":{\"channelID\":\"212959091\",\"channelLogin\":\"touringnews\",\"hasChannelID\":true,\"targetLogin\":\""+user+"\"},\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"34bbb6d307d991c79319d95b5f11db539f646507bfcb77e975300555dd1d5d21\"}}}]","method":"POST","mode":"cors"});
+
+var cred_ob = {
+  oauth: "OAuth ljcrpaej76iqf8uhputof6t199j022",
+  client_id: "kimne78kx3ncx6brgo4mv6wki5h1ko",
+  channel_name: "theory_pleeb",
+  sha256Hash: "d01d1e00fde5d0d5618249072692dff97bc7b5ebe5722d4c2853344ad6eb2b4c",
+  channel_id: "",
+}
+async function getFollowerDetail(user,creds){
+  var res = await fetch("https://gql.twitch.tv/gql", {
+  "headers": {
+    "accept": "*/*",
+    "accept-language": "en-US",
+    "authorization": "OAuth ljcrpaej76iqf8uhputof6t199j022",
+    "client-id": "kimne78kx3ncx6brgo4mv6wki5h1ko",
+    "content-type": "text/plain;charset=UTF-8",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-site",
+    "x-device-id": "2c256b16ac5521e7"
+  },
+  "referrer": "https://www.twitch.tv/theory_pleeb?referrer=raid",
+  "referrerPolicy": "no-referrer-when-downgrade",
+  "body": "[{\"operationName\":\"ViewerCard\",\"variables\":{\"channelID\":\"468466644\",\"channelLogin\":\"theory_pleeb\",\"hasChannelID\":true,\"targetLogin\":\""+user+"\"},\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"9a77b4466fc29f66255593b7703b248fade2d26acd7a78592bd8fcae992923a5\"}}}]",
+  "method": "POST",
+  "mode": "cors",
+  "credentials": "include"
+});
   var d = await res.json();
   console.log(d);
   var ob = parseOb(d);
@@ -32,14 +58,14 @@ var containArr = [];
 async function looper(arr){
   
   for(var i=0; i<arr.length; i++){
-    var res = await getFollowerDetail(arr[i]);
+    var res = await getFollowerDetail(arr[i],cred_ob);
     containArr.push(res);
     await delay(rando(111))
   }
-
+  console.log(containArr )
 }
 
-looper(all_users)
+looper(temp1)
 
 /////////////
 
